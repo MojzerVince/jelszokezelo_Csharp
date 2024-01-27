@@ -19,16 +19,23 @@ namespace jelszokezelo
             for (int i = 0; i < length; i++)
             {
                 Generator();
-                if (!byte.TryParse(chars[index], out szamE) && i == length - 1)
+                if (szam < 1 && i == length - 1)
                 {
-                    Generator();
+                    while (!byte.TryParse(chars[index], out szamE))
+                    {
+                        Generator();
+                        if (byte.TryParse(chars[index], out szamE))
+                        {
+                            szam++;
+                            jelszo += chars[index];
+                        }
+                    }
+                    
                     Console.WriteLine("NIGA");
                 }
                 else
                 {
-                    szam++;
-                    jelszo += chars[index];
-                    
+                    jelszo += chars[index];                    
                 }             
             }
 
