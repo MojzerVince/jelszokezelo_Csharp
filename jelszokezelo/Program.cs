@@ -14,15 +14,13 @@ namespace jelszokezelo
         //jelszó karakterszámának eltárolására felvett változó
         static byte passLength = 0;
 
+        static string pass = "";
+
         static void Main(string[] args)
-        {
-            string jelszo = "";
-            
+        {                       
             byte szamE;
-            byte szamH;
     
-            byte length = byte.Parse(Console.ReadLine());
-            passLength = length;
+            passLength = byte.Parse(Console.ReadLine());
 
             //Számgenerálás 0 és a kért hosszúságú jelszó között
             LengthIndexGenerator();
@@ -31,7 +29,7 @@ namespace jelszokezelo
             Console.WriteLine($"length random indexe: {lengthIndex}");            
             Console.WriteLine();
 
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < passLength; i++)
             {
                 Generator();
                 if (i == lengthIndex)
@@ -39,10 +37,10 @@ namespace jelszokezelo
                     while (!byte.TryParse(chars[index], out szamE))
                     {
                         Generator();
-                        if (byte.TryParse(chars[index], out szamH))
+                        if (byte.TryParse(chars[index], out szamE))
                         {
                             
-                            jelszo += chars[index];                            
+                            pass += chars[index];                            
                         }
                     }
                                         
@@ -50,13 +48,14 @@ namespace jelszokezelo
                 }
                 else
                 {
-                    jelszo += chars[index];                    
+                    pass += chars[index];                    
                 }
                 Console.WriteLine($"{i + 1}. Karakter: {chars[index]}");
             }
             Console.WriteLine();
-            Console.WriteLine($"Jelszó: {jelszo} ({length} karakter hosszú)");
-            
+            Console.WriteLine($"Jelszó: {pass} ({passLength} karakter hosszú)");
+
+            Save();
         }
 
         static void Generator()
@@ -69,6 +68,20 @@ namespace jelszokezelo
         {
             Random r = new Random();
             lengthIndex = r.Next(1, passLength);            
+        }
+
+        static void Save()
+        {
+            Console.Write("Username/Email: ");
+            string usern = Console.ReadLine();            
+
+            StreamWriter sw = new StreamWriter("n.txt", true);
+            sw.WriteLine($"{usern}|{pass}");
+
+            sw.Close();
+
+            Console.Clear();
+            Console.WriteLine("Password saved");
         }
     }
 }
