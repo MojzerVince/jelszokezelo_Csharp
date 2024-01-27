@@ -19,16 +19,17 @@ namespace jelszokezelo
 
         static void Main(string[] args)
         {
-            Generator(); //jelszó generálása
+            passLength = byte.Parse(Console.ReadLine()); //jelszó hosszúságának bekérése
 
             LengthIndexGenerator(); //Erre az indexre tesz majd FIXEN egy számot
+
+            Generator(); //jelszó generálása
             
             Save(); //jelszó mentése egy txt fájlba
         }
 
         static void Generator()
         {
-            passLength = byte.Parse(Console.ReadLine()); //jelszó hosszúságának bekérése
             byte szamE;
 
             for (int i = 0; i < passLength; i++)
