@@ -18,8 +18,7 @@ namespace jelszokezelo
         static byte passLength = 0;
      
         static string pass = ""; //jelszó változó
-        
-       
+              
         static void Main()
         {
             Load("n.txt");
@@ -34,7 +33,6 @@ namespace jelszokezelo
             
             Save(); //jelszó mentése egy txt fájlba
             */
-
         }
 
         static void Menu()
@@ -59,7 +57,7 @@ namespace jelszokezelo
                     break;
                 case ConsoleKey.Escape:
                     Console.Clear();
-                    Console.WriteLine("Exiting...");
+                    Console.WriteLine("EExiting...");
                     break;
                 default:
                     break;
@@ -174,7 +172,6 @@ namespace jelszokezelo
         {
             StreamReader sr = new StreamReader(file);
 
-
             while (!sr.EndOfStream)
             {                
                 string row = sr.ReadLine();
@@ -213,14 +210,12 @@ namespace jelszokezelo
                     Console.WriteLine($"Username: {item.username} - Password: {item.password} - Location: {item.location} \n");                    
                     Menu();
                 }
-                /*else
+                else
                 {
                     Console.Clear();
-                    Console.WriteLine("Do not exist! Try again :(");
+                    Console.WriteLine("Password isn't existing! Try again :(");
                     Query();
                 }
-                */
-                
             }
         }       
     }
