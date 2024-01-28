@@ -17,7 +17,7 @@ namespace jelszokezelo
      
         static string pass = ""; //jelszó változó
 
-        static void Main(string[] args)
+        static void Main()
         {
             Input();
 
@@ -28,7 +28,7 @@ namespace jelszokezelo
             Save(); //jelszó mentése egy txt fájlba
         }
 
-        static void Input()
+        static void Input() //Jelszóhosszúság ellenőrzése
         {
             bool legit = false;
 
@@ -55,7 +55,7 @@ namespace jelszokezelo
             }
         }
 
-        static void Generator()
+        static void Generator() //Jelszó karaktereinek generálása
         {
             byte szamE;
 
@@ -94,16 +94,38 @@ namespace jelszokezelo
 
         static void Save() //Jelszó mentése egy txt fájlba
         {
-            Console.Write("Username/Email: ");
-            string usern = Console.ReadLine();            
+            Console.Write("Save Password? Y/N ");
+            string ans = Console.ReadLine();
 
-            StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz
-            sw.WriteLine($"{usern} {pass}");
+            StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz    
 
-            sw.Close();
+            switch (ans)
+            {
+                case "Y":
+                    Console.Write("Username/Email: ");
+                    string usern = Console.ReadLine();
 
-            Console.Clear();
-            Console.WriteLine("Password saved");
+                    sw.WriteLine($"{usern} {pass}");
+                    sw.Close();
+
+                    Console.Clear();
+                    Console.WriteLine("Password saved");
+                    break;
+                case "N":
+                    Console.Write("Do you want to generate new one? Y/N ");
+                    string gen = Console.ReadLine();
+                    if (gen == "Y")
+                    {
+                        pass = ""; //törli a változó értékét
+                        Console.Clear();
+                        sw.Close(); //zárja a fájlt, különben nem tudná újra megnyitni
+                        Main();
+                    }
+                    else Console.WriteLine("Exiting...");
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
