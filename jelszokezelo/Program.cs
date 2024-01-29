@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
 
@@ -59,7 +61,7 @@ namespace jelszokezelo
                     break;
                 case ConsoleKey.Escape:
                     Console.Clear();
-                    Console.WriteLine("Exiting...");
+                    Console.WriteLine("EExiting...");
                     break;
                 default:
                     break;
@@ -132,37 +134,38 @@ namespace jelszokezelo
 
         static void Save() //Jelszó mentése egy txt fájlba
         {
-            Console.Write("Save Password? Y/N ");
-            string ans = Console.ReadLine();
+            Console.Write("Save Password? Y/N ");            
 
             StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz    
+                        
 
-            switch (ans.ToUpper())
-            {
-                case "Y":
-                    Console.Write("Username/Email: ");
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(false);
+
+            switch (consoleKeyInfo.Key)
+            {              
+                case ConsoleKey.Y:
+                    Console.Clear();
+                    Console.Write("Username: ");
                     string usern = Console.ReadLine();
 
-                    Console.WriteLine("Location: ");
+                    Console.Write("Email: ");
+                    string email = Console.ReadLine();
+
+                    Console.Write("Location: ");
                     string location = Console.ReadLine();
 
-                    sw.WriteLine($"{usern} {pass} {location}");
+                    sw.WriteLine($"{usern} {email} {pass} {location}");
                     sw.Close();
 
                     Console.Clear();
                     Console.WriteLine("Password saved");
                     break;
-                case "N":
-                    Console.Write("Do you want to generate new one? Y/N ");
-                    string gen = Console.ReadLine();
-                    if (gen.ToUpper() == "Y")
-                    {
-                        pass = ""; //törli a változó értékét
-                        Console.Clear();
-                        sw.Close(); //zárja a fájlt, különben nem tudná újra megnyitni
-                        Menu();
-                    }
-                    else Console.WriteLine("Exiting...");                                           
+                case ConsoleKey.N:
+                    Console.WriteLine("Exiting...");
+                    pass = ""; //törli a változó értékét
+                    Console.Clear();
+                    sw.Close(); //zárja a fájlt, különben nem tudná újra megnyitni
+                    Menu();
                     break;
                 default:
                     Save(); 
@@ -172,6 +175,7 @@ namespace jelszokezelo
 
         static void Load(string file)
         {
+            passwords.Clear();
             StreamReader sr = new StreamReader(file);
 
 
@@ -183,8 +187,9 @@ namespace jelszokezelo
                 Passwords pass = new Passwords();
 
                 pass.username = data[0];
-                pass.password = data[1];
-                pass.location = data[2];
+                pass.email = data[1];
+                pass.password = data[2];
+                pass.location = data[3];
 
                 passwords.Add(pass);
 
@@ -194,6 +199,9 @@ namespace jelszokezelo
 
         static void Query()
         {
+            Load("n.txt");
+            bool exist = false;
+
             Console.WriteLine("Saved passwords from: ");
 
             foreach (Passwords item in passwords)
@@ -205,23 +213,23 @@ namespace jelszokezelo
             Console.Write("Query password: ");             
             string input = Console.ReadLine();
 
+            Console.Clear();
             foreach (Passwords item in passwords)
             {
                 if (item.location == input)
                 {
-                    Console.Clear();
-                    Console.WriteLine($"Username: {item.username} - Password: {item.password} - Location: {item.location} \n");                    
-                    Menu();
-                }
-                /*else
-                {
-                    Console.Clear();
-                    Console.WriteLine("Do not exist! Try again :(");
-                    Query();
-                }
-                */
-                
+                    exist = true;                    
+                    Console.WriteLine($"Email: {item.email}\nUsername: {item.username}\nPassword: {item.password}\nLocation: {item.location} \n");                                   
+                }              
             }
+            
+            if (!exist) 
+            {
+                Console.Clear();
+                Console.WriteLine("Do not exist! Try again :(");
+                Menu(); 
+            }
+            else Menu();
         }       
     }
 }

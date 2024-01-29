@@ -9,6 +9,7 @@ namespace jelszokezelo
     struct Passwords
     {
         public string username;
+        public string email;
         public string password;
         public string location;
     }
