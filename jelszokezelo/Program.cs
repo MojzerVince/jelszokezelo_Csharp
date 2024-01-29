@@ -20,8 +20,7 @@ namespace jelszokezelo
         static byte passLength = 0;
      
         static string pass = ""; //jelszó változó
-        
-       
+              
         static void Main()
         {
             Load("n.txt");
@@ -36,7 +35,6 @@ namespace jelszokezelo
             
             Save(); //jelszó mentése egy txt fájlba
             */
-
         }
 
         static void Menu()
@@ -177,7 +175,6 @@ namespace jelszokezelo
         {
             passwords.Clear();
             StreamReader sr = new StreamReader(file);
-
 
             while (!sr.EndOfStream)
             {                
