@@ -166,6 +166,8 @@ namespace jelszokezelo
                     Menu();
                     break;
                 default:
+                    Console.Clear();
+                    sw.Close();
                     Save(); 
                     break;
             }
