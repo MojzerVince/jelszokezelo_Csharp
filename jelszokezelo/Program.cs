@@ -29,9 +29,10 @@ namespace jelszokezelo
 
         static void Menu()
         {
+            Console.Clear();
             Console.WriteLine("Options: \t | 0: Generate new password | 1: Show passwords | ESC: Exit");
 
-            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(false);
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
             switch (consoleKeyInfo.Key)
             {
@@ -196,11 +197,10 @@ namespace jelszokezelo
 
             foreach (Passwords item in passwords)
             {
-                //Console.Clear();
                 Console.WriteLine(item.website);               
             }
             Console.WriteLine();
-            Console.Write("Query password: ");             
+            Console.Write("Enter website name to show password, delete or modify: ");             
             string input = Console.ReadLine();
 
             Console.Clear();
@@ -212,14 +212,56 @@ namespace jelszokezelo
                     Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {item.password} \n");                                   
                 }              
             }
-            
-            if (!exist) 
+
+            if (!exist)
             {
                 Console.Clear();
                 Console.WriteLine("Not valid query! Try again :(");
-                Menu(); 
+                Manipulate();
             }
-            else Menu();
-        }       
+            else Manipulate();
+        }
+
+        static void Manipulate()
+        {
+            Console.WriteLine("Options: \t | M: Modify password | D: Delete Password | ESC: Menu");
+
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+
+            switch (consoleKeyInfo.Key)
+            {
+                case ConsoleKey.M:
+                    Console.Clear();
+                    break;
+                case ConsoleKey.D:
+                    Delete();
+                    break;
+                case ConsoleKey.Escape: //itt is fos valamiért és az első 2 betűt nem iratja ki az optionsból
+                    Menu();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        static void Delete()
+        {
+            Console.WriteLine("Please enter the password combination you want to delete!");
+            string pass = Console.ReadLine();
+
+            foreach (Passwords item in passwords)
+            {
+                if (item.password == pass)
+                {
+                    Console.WriteLine("EZT KÉNE TÖRÖLNI");
+                    //--FÁJLÚJRAÍRÁS KÓD--
+                }
+                else
+                {
+                    Console.WriteLine("Not valid password given, try again!");
+                    Delete();
+                }
+            }
+        }
     }
 }
