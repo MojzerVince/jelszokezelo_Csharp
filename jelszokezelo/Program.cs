@@ -29,7 +29,6 @@ namespace jelszokezelo
 
         static void Menu()
         {
-            Console.Clear();
             Console.WriteLine("Options: \t | 0: Generate new password | 1: Show passwords | ESC: Exit");
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
@@ -216,8 +215,11 @@ namespace jelszokezelo
             if (!exist)
             {
                 Console.Clear();
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Black;
                 Console.WriteLine("Not valid query! Try again :(");
-                Manipulate();
+                Console.ResetColor();
+                Query();
             }
             else Manipulate();
         }
@@ -230,9 +232,9 @@ namespace jelszokezelo
 
             switch (consoleKeyInfo.Key)
             {
-                case ConsoleKey.M:
+                /*case ConsoleKey.M:
                     Console.Clear();
-                    break;
+                    break;*/
                 case ConsoleKey.D:
                     Delete();
                     break;
