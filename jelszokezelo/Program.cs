@@ -20,7 +20,7 @@ namespace jelszokezelo
         static byte passLength = 0;
      
         static string pass = ""; //jelszó változó
-              
+
         static void Main()
         {
             Load("n.txt"); //mentett jelszavak betöltése
@@ -31,7 +31,7 @@ namespace jelszokezelo
         {
             Console.WriteLine("Options: \t | 0: Generate new password | 1: Show passwords | ESC: Exit");
 
-            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(false);
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
             switch (consoleKeyInfo.Key)
             {
@@ -51,7 +51,7 @@ namespace jelszokezelo
                     break;
                 case ConsoleKey.Escape:
                     Console.Clear();
-                    Console.WriteLine("EExiting..."); //ha csak 1 E van, akkor valamiért fos
+                    Console.WriteLine("Exiting..."); //ha csak 1 E van, akkor valamiért fos
                     break;
                 default:
                     break;
@@ -126,8 +126,7 @@ namespace jelszokezelo
         {
             Console.Write("Save Password? Y/N ");            
 
-            StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz    
-                        
+            StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz                            
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(false);
 
@@ -144,11 +143,12 @@ namespace jelszokezelo
                     Console.Write("Website: ");
                     string website = Console.ReadLine();
 
-                    sw.WriteLine($"{usern} {email} {pass} {website}");
+                    sw.WriteLine($"{pass} {usern} {email} {website}");
                     sw.Close();
 
                     Console.Clear();
                     Console.WriteLine("Password saved");
+                    pass = "";
                     break;
                 case ConsoleKey.N:
                     Console.WriteLine("Exiting...");
@@ -177,12 +177,16 @@ namespace jelszokezelo
 
                 Passwords pass = new Passwords();
 
-                pass.username = data[0];
-                pass.email = data[1];
-                pass.password = data[2];
-                pass.website = data[3];
+                try //megnézi, hogy beolvashatóak-e az adatok
+                {                    
+                    pass.password = data[0];
+                    pass.username = data[1];
+                    pass.email = data[2];
+                    pass.website = data[3];
 
-                passwords.Add(pass);
+                    passwords.Add(pass);
+                }
+                catch { } //ha nem, akkor nem csinál semmit xd
             }
             sr.Close();
         }
@@ -196,11 +200,10 @@ namespace jelszokezelo
 
             foreach (Passwords item in passwords)
             {
-                //Console.Clear();
                 Console.WriteLine(item.website);               
             }
             Console.WriteLine();
-            Console.Write("Query password: ");             
+            Console.Write("Enter website name to show password, delete or modify: ");             
             string input = Console.ReadLine();
 
             Console.Clear();
@@ -212,14 +215,81 @@ namespace jelszokezelo
                     Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {item.password} \n");                                   
                 }              
             }
-            
-            if (!exist) 
+
+            if (!exist)
             {
                 Console.Clear();
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Black;
                 Console.WriteLine("Not valid query! Try again :(");
-                Menu(); 
+                Console.ResetColor();
+                Query();
             }
-            else Menu();
-        }       
+            else Manipulate();
+        }
+
+        static void Manipulate()
+        {
+            Console.WriteLine("Options: \t | M: Modify password | D: Delete Password | ESC: Menu");
+
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+
+            switch (consoleKeyInfo.Key)
+            {
+                /*case ConsoleKey.M: //későbbi feature
+                    Console.Clear();
+                    break;*/
+                case ConsoleKey.D:
+                    Delete();
+                    break;
+                case ConsoleKey.Escape: //itt is fos valamiért és az első 2 betűt nem iratja ki az optionsból
+                    Menu();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        static void Delete()
+        {
+            Console.WriteLine("Please enter the password combination you want to delete!");
+            string pass = Console.ReadLine();
+
+            bool found = false;
+
+            foreach (Passwords item in passwords)
+            {
+                if (item.password == pass) //végigmegy a tárolt jelszavakon és megnézi van-e egyezés
+                {
+                    passwords.Remove(item);
+
+                    StreamWriter sw = new StreamWriter("n.txt", false); //újraírja a fájlt
+                    found = true;
+
+                    foreach (Passwords item1 in passwords)
+                    {
+                        sw.WriteLine($"{item1.password} {item1.username} {item1.email} {item1.website}");
+                    }                  
+
+                    sw.Close();
+
+                    Console.Clear();
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine("Password successfully deleted!");
+                    Console.ResetColor();
+                    Menu();
+                }                
+            }
+
+            if(!found) //ha nem találja a törlendő jelszót, akkor újra meg kell adni, ez amúgy egy végtelen ciklus
+            {
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine("Not valid password given, try again!");
+                Console.ResetColor();
+                Delete();
+            }
+        }
     }
 }
