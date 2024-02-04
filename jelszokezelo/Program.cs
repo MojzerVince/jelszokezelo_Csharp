@@ -180,8 +180,8 @@ namespace jelszokezelo
                 try //megnézi, hogy beolvashatóak-e az adatok
                 {                    
                     pass.password = data[0];
-                    pass.email = data[1];
-                    pass.username = data[2];
+                    pass.username = data[1];
+                    pass.email = data[2];
                     pass.website = data[3];
 
                     passwords.Add(pass);
@@ -261,15 +261,15 @@ namespace jelszokezelo
             {
                 if (item.password == pass) //végigmegy a tárolt jelszavakon és megnézi van-e egyezés
                 {
+                    passwords.Remove(item);
+
                     StreamWriter sw = new StreamWriter("n.txt", false); //újraírja a fájlt
                     found = true;
 
-                    foreach (Passwords item2 in passwords) 
-                    { //ha volt egyezés akkor újraírja a fájlt, egészen addig ameddig el nem éri a törlendő jelszót, annak a helyére csak egy üres space-t tesz
-                        if (item2.password != pass)
-                            sw.WriteLine($"{item2.password} {item2.username} {item2.email} {item2.website}");
-                        else sw.WriteLine("");
-                    }
+                    foreach (Passwords item1 in passwords)
+                    {
+                        sw.WriteLine($"{item1.password} {item1.username} {item1.email} {item1.website}");
+                    }                  
 
                     sw.Close();
 
