@@ -236,9 +236,10 @@ namespace jelszokezelo
 
             switch (consoleKeyInfo.Key)
             {
-                /*case ConsoleKey.M: //későbbi feature
+                case ConsoleKey.M: //későbbi feature
                     Console.Clear();
-                    break;*/
+                    Modify();
+                    break;
                 case ConsoleKey.D:
                     Delete();
                     break;
@@ -250,6 +251,56 @@ namespace jelszokezelo
             }
         }
 
+        static void Modify()
+        {
+            //H5!?mekKQ+ fasz ciganyok@gmail.com github
+            Console.Write("Please enter the password combination you want to modify! ");
+            string pass = Console.ReadLine();
+            ConsoleKeyInfo consoleKeyInfo;
+            
+            foreach (Passwords item in passwords)
+            {                
+                if (item.password == pass)
+                {
+                    Console.WriteLine("Please enter a number what you want to modify! 1: Username | 2: Email | 3: Website");
+
+                    StreamWriter sw = new StreamWriter("n.txt", false);
+                    consoleKeyInfo = Console.ReadKey(false);
+
+                    switch (consoleKeyInfo.Key)
+                    {
+                        case ConsoleKey.D1:
+                            Console.Clear();                            
+                            Console.Write("Please enter the new username: ");
+                            string newUsername = Console.ReadLine();                            
+
+                            passwords.Remove(item);                           
+                            sw.WriteLine($"{item.password} {newUsername} {item.email} {item.website}");
+                            sw.Close();                            
+                            Load("n.txt");
+                            break;
+                        case ConsoleKey.D2:
+                            Console.Clear();
+                            break;
+                        case ConsoleKey.D3:
+                            Console.Clear();
+                            break;
+                    }
+                }
+            }
+            /*
+            Passwords passes = new Passwords();
+
+            passes.password = password;
+            passes.username = username;
+            passes.email = email;           
+            passes.website = website;
+
+            passwords.Add(passes);
+            */
+            
+        }       
+        
         static void Delete()
         {
             Console.WriteLine("Please enter the password combination you want to delete!");
