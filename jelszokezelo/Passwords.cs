@@ -11,6 +11,6 @@ namespace jelszokezelo
         public string username;
         public string email;
         public string password;
-        public string location;
+        public string website;
     }
 }

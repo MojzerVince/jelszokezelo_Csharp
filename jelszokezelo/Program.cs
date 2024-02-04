@@ -23,28 +23,19 @@ namespace jelszokezelo
               
         static void Main()
         {
-            Load("n.txt");
-            Menu();
-            
-            /*
-            Input();
-
-            LengthIndexGenerator(); //Erre az indexre tesz majd FIXEN egy számot
-
-            Generator(); //jelszó generálása     
-            
-            Save(); //jelszó mentése egy txt fájlba
-            */
+            Load("n.txt"); //mentett jelszavak betöltése
+            Menu(); //menükód bekérése
         }
 
         static void Menu()
         {
-            Console.WriteLine("Options: \t | 0: Generate new password | 1: Show a password | ESC: Exit");
+            Console.WriteLine("Options: \t | 0: Generate new password | 1: Show passwords | ESC: Exit");
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(false);
 
             switch (consoleKeyInfo.Key)
             {
+                case ConsoleKey.NumPad0:
                 case ConsoleKey.D0:
                     Console.Clear();
                     Input();
@@ -53,13 +44,14 @@ namespace jelszokezelo
                     Save();                  //jelszó mentése egy txt fájlba
                     Menu();                  //navigálómenü
                     break;
+                case ConsoleKey.NumPad1:
                 case ConsoleKey.D1:
                     Console.Clear();
                     Query();                 //Jelszólekérés
                     break;
                 case ConsoleKey.Escape:
                     Console.Clear();
-                    Console.WriteLine("EExiting...");
+                    Console.WriteLine("EExiting..."); //ha csak 1 E van, akkor valamiért fos
                     break;
                 default:
                     break;
@@ -149,10 +141,10 @@ namespace jelszokezelo
                     Console.Write("Email: ");
                     string email = Console.ReadLine();
 
-                    Console.Write("Location: ");
-                    string location = Console.ReadLine();
+                    Console.Write("Website: ");
+                    string website = Console.ReadLine();
 
-                    sw.WriteLine($"{usern} {email} {pass} {location}");
+                    sw.WriteLine($"{usern} {email} {pass} {website}");
                     sw.Close();
 
                     Console.Clear();
@@ -188,10 +180,9 @@ namespace jelszokezelo
                 pass.username = data[0];
                 pass.email = data[1];
                 pass.password = data[2];
-                pass.location = data[3];
+                pass.website = data[3];
 
                 passwords.Add(pass);
-
             }
             sr.Close();
         }
@@ -206,7 +197,7 @@ namespace jelszokezelo
             foreach (Passwords item in passwords)
             {
                 //Console.Clear();
-                Console.WriteLine(item.location);               
+                Console.WriteLine(item.website);               
             }
             Console.WriteLine();
             Console.Write("Query password: ");             
@@ -215,17 +206,17 @@ namespace jelszokezelo
             Console.Clear();
             foreach (Passwords item in passwords)
             {
-                if (item.location == input)
+                if (item.website == input)
                 {
                     exist = true;                    
-                    Console.WriteLine($"Email: {item.email}\nUsername: {item.username}\nPassword: {item.password}\nLocation: {item.location} \n");                                   
+                    Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {item.password} \n");                                   
                 }              
             }
             
             if (!exist) 
             {
                 Console.Clear();
-                Console.WriteLine("Do not exist! Try again :(");
+                Console.WriteLine("Not valid query! Try again :(");
                 Menu(); 
             }
             else Menu();
