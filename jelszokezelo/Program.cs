@@ -302,11 +302,65 @@ namespace jelszokezelo
                     break;
                 case ConsoleKey.D2:
                     Console.Clear();
+                    NewEmail();
                     break;
                 case ConsoleKey.D3:
                     Console.Clear();
+                    NewWebsite();
                     break;
             }
+        }
+
+        static void NewWebsite()
+        {
+            Console.Write("Please enter the password combination you want to modify! ");
+            string password = Console.ReadLine();
+
+            Console.Write("Please enter the new wewbsite: ");
+            string newWebsite = Console.ReadLine();
+
+            StreamWriter sw = new StreamWriter("n.txt", false);
+
+            for (int i = 0; i < n; i++)
+            {
+                if (passwords1[i].password == password)
+                {
+                    passwords1[i].website = newWebsite;
+                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {newWebsite}");
+                }
+                else
+                {
+                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
+                }
+            }
+            sw.Close();
+            Main();
+        }
+
+        static void NewEmail()
+        {
+            Console.Write("Please enter the password combination you want to modify! ");
+            string password = Console.ReadLine();
+
+            Console.Write("Please enter the new email: ");
+            string newEmail = Console.ReadLine();
+
+            StreamWriter sw = new StreamWriter("n.txt", false);
+
+            for (int i = 0; i < n; i++)
+            {
+                if (passwords1[i].password == password)
+                {
+                    passwords1[i].email = newEmail;
+                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {newEmail} {passwords1[i].website}");
+                }
+                else
+                {
+                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
+                }
+            }
+            sw.Close();
+            Main();
         }
 
         static void NewUsername()
@@ -330,8 +384,7 @@ namespace jelszokezelo
                 {
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
                 }
-            }            
-           
+            }             
             sw.Close();
             Main();                      
         }
