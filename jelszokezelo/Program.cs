@@ -10,6 +10,9 @@ namespace jelszokezelo
     internal class Program
     {
         static List<Passwords> passwords = new List<Passwords>();
+        static int n = 0;
+        static int c = 0;
+        static Passwords[] passwords1 = new Passwords[50];        
 
         static string[] chars = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "!", "@", "#", "$", "%", "&", "*", "(", ")", "_", "+", "-", "=", "{", "}", "[", "]", ":", ";", "'", "<", ">", ",", ".", "?", "/", "|" };
         static int index = 0; //random választott betűk indexe
@@ -132,7 +135,7 @@ namespace jelszokezelo
 
             StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz                            
 
-            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(false);
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
             switch (consoleKeyInfo.Key)
             {
@@ -170,8 +173,10 @@ namespace jelszokezelo
         }
 
         static void Load(string file)
-        {
+        {            
             passwords.Clear();
+            n = 0;
+
             StreamReader sr = new StreamReader(file);
 
             while (!sr.EndOfStream)
@@ -193,6 +198,31 @@ namespace jelszokezelo
                 catch { } //ha nem, akkor nem csinál semmit xd
             }
             sr.Close();
+
+            StreamReader sr1 = new StreamReader(file);
+
+            while (!sr1.EndOfStream)
+            {
+                string row = sr1.ReadLine();
+                string[] data = row.Split(" ");
+                
+                try //megnézi, hogy beolvashatóak-e az adatok
+                {
+                    passwords1[n].password = data[0];
+                    passwords1[n].username = data[1];
+                    passwords1[n].email = data[2];
+                    passwords1[n].website = data[3];
+
+                    n++;
+                }
+                catch { } //ha nem, akkor nem csinál semmit xd
+            }            
+            sr1.Close();            
+        }
+
+        static void LoadArray(string file)
+        {
+            
         }
 
         static void Query()
@@ -236,7 +266,7 @@ namespace jelszokezelo
         {
             Console.WriteLine("Options: \t | M: Modify password | D: Delete Password | ESC: Menu");
 
-            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(false);
 
             switch (consoleKeyInfo.Key)
             {
@@ -268,7 +298,7 @@ namespace jelszokezelo
             {
                 case ConsoleKey.D1:
                     Console.Clear();
-                    NewUsername();                    
+                    NewUsername();                                        
                     break;
                 case ConsoleKey.D2:
                     Console.Clear();
@@ -285,32 +315,25 @@ namespace jelszokezelo
             string password = Console.ReadLine();
 
             Console.Write("Please enter the new username: ");
-            string newUsername = Console.ReadLine();
+            string newUsername = Console.ReadLine();            
 
             StreamWriter sw = new StreamWriter("n.txt", false);
-            
-            foreach (Passwords item in passwords)
+
+            for (int i = 0; i < n ; i++)
             {
-                if (item.password == password)
+                if (passwords1[i].password == password)
                 {
-                    passwords.Remove(item);
-
-                    Passwords pass = new Passwords();
-
-                    pass.username = newUsername;
-                    pass.password = item.password;
-                    pass.email = item.email;
-                    pass.website = item.website;
-
-                    passwords.Add(pass);    
+                    passwords1[i].username = newUsername;
+                    sw.WriteLine($"{passwords1[i].password} {newUsername} {passwords1[i].email} {passwords1[i].website}");
                 }                
-            }
+                else
+                {
+                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
+                }
+            }            
            
-            foreach (Passwords item2 in passwords)
-            {
-                sw.WriteLine($"{item2.password} {item2.username} {item2.email} {item2.website}");
-            }
-            sw.Close();            
+            sw.Close();
+            Main();                      
         }
         
         static void Delete()
