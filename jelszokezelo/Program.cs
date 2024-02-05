@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Xml.Linq;
 
 namespace jelszokezelo
@@ -9,6 +10,9 @@ namespace jelszokezelo
     internal class Program
     {
         static List<Passwords> passwords = new List<Passwords>();
+        static int n = 0;
+        static int c = 0;
+        static Passwords[] passwords1 = new Passwords[50];        
 
         static string[] chars = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "!", "@", "#", "$", "%", "&", "*", "(", ")", "_", "+", "-", "=", "{", "}", "[", "]", ":", ";", "'", "<", ">", ",", ".", "?", "/", "|" };
         static int index = 0; //random választott betűk indexe
@@ -18,7 +22,7 @@ namespace jelszokezelo
 
         //jelszó karakterszámának eltárolására felvett változó
         static byte passLength = 0;
-     
+
         static string pass = ""; //jelszó változó
 
         static void Main()
@@ -53,6 +57,9 @@ namespace jelszokezelo
                     Console.Clear();
                     Console.WriteLine("Exiting..."); //ha csak 1 E van, akkor valamiért fos
                     break;
+                case ConsoleKey.D3:
+                    Modify();
+                    break;
                 default:
                     break;
             }
@@ -62,27 +69,27 @@ namespace jelszokezelo
         {
             bool legit = false;
 
-            while(!legit)
-            try
-            {
-                Console.WriteLine("Passlength  between 8-20");
-                Console.Write("Password Length: ");
-                passLength = byte.Parse(Console.ReadLine()); //jelszó hosszúságának bekérése
-                legit = true;
+            while (!legit)
+                try
+                {
+                    Console.WriteLine("Passlength  between 8-20");
+                    Console.Write("Password Length: ");
+                    passLength = byte.Parse(Console.ReadLine()); //jelszó hosszúságának bekérése
+                    legit = true;
 
-                while (passLength < 8 || passLength > 20) //ha kisebb mint 8 vagy nagyobb mint 20 bekéri újra
+                    while (passLength < 8 || passLength > 20) //ha kisebb mint 8 vagy nagyobb mint 20 bekéri újra
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Please enter a pass length above 7 and below 21!");
+                        Console.Write("Password Length: ");
+                        passLength = byte.Parse(Console.ReadLine());
+                    }
+                }
+                catch
                 {
                     Console.Clear();
-                    Console.WriteLine("Please enter a pass length above 7 and below 21!");
-                    Console.Write("Password Length: ");
-                    passLength = byte.Parse(Console.ReadLine());
+                    Console.WriteLine("Plese enter a number!");
                 }
-            }
-            catch
-            {
-                Console.Clear();
-                Console.WriteLine("Plese enter a number!");
-            }
         }
 
         static void Generator() //Jelszó karaktereinek generálása
@@ -119,19 +126,19 @@ namespace jelszokezelo
         static void LengthIndexGenerator() //Generál egy FIX pozíciót egy szám karakternek
         {
             Random r = new Random();
-            lengthIndex = r.Next(1, passLength);    
+            lengthIndex = r.Next(1, passLength);
         }
 
         static void Save() //Jelszó mentése egy txt fájlba
         {
-            Console.Write("Save Password? Y/N ");            
+            Console.Write("Save Password? Y/N ");
 
             StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz                            
 
-            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(false);
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
             switch (consoleKeyInfo.Key)
-            {              
+            {
                 case ConsoleKey.Y:
                     Console.Clear();
                     Console.Write("Username: ");
@@ -160,25 +167,27 @@ namespace jelszokezelo
                 default:
                     Console.Clear();
                     sw.Close();
-                    Save(); 
+                    Save();
                     break;
             }
         }
 
         static void Load(string file)
-        {
+        {            
             passwords.Clear();
+            n = 0;
+
             StreamReader sr = new StreamReader(file);
 
             while (!sr.EndOfStream)
-            {                
+            {
                 string row = sr.ReadLine();
                 string[] data = row.Split(" ");
 
                 Passwords pass = new Passwords();
 
                 try //megnézi, hogy beolvashatóak-e az adatok
-                {                    
+                {
                     pass.password = data[0];
                     pass.username = data[1];
                     pass.email = data[2];
@@ -189,6 +198,31 @@ namespace jelszokezelo
                 catch { } //ha nem, akkor nem csinál semmit xd
             }
             sr.Close();
+
+            StreamReader sr1 = new StreamReader(file);
+
+            while (!sr1.EndOfStream)
+            {
+                string row = sr1.ReadLine();
+                string[] data = row.Split(" ");
+                
+                try //megnézi, hogy beolvashatóak-e az adatok
+                {
+                    passwords1[n].password = data[0];
+                    passwords1[n].username = data[1];
+                    passwords1[n].email = data[2];
+                    passwords1[n].website = data[3];
+
+                    n++;
+                }
+                catch { } //ha nem, akkor nem csinál semmit xd
+            }            
+            sr1.Close();            
+        }
+
+        static void LoadArray(string file)
+        {
+            
         }
 
         static void Query()
@@ -200,10 +234,10 @@ namespace jelszokezelo
 
             foreach (Passwords item in passwords)
             {
-                Console.WriteLine(item.website);               
+                Console.WriteLine(item.website);
             }
             Console.WriteLine();
-            Console.Write("Enter website name to show password, delete or modify: ");             
+            Console.Write("Enter website name to show password, delete or modify: ");
             string input = Console.ReadLine();
 
             Console.Clear();
@@ -211,9 +245,9 @@ namespace jelszokezelo
             {
                 if (item.website == input)
                 {
-                    exist = true;                    
-                    Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {item.password} \n");                                   
-                }              
+                    exist = true;
+                    Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {item.password} \n");
+                }
             }
 
             if (!exist)
@@ -232,13 +266,14 @@ namespace jelszokezelo
         {
             Console.WriteLine("Options: \t | M: Modify password | D: Delete Password | ESC: Menu");
 
-            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(false);
 
             switch (consoleKeyInfo.Key)
             {
-                /*case ConsoleKey.M: //későbbi feature
+                case ConsoleKey.M: //későbbi feature
                     Console.Clear();
-                    break;*/
+                    Modify();
+                    break;
                 case ConsoleKey.D:
                     Delete();
                     break;
@@ -250,6 +285,110 @@ namespace jelszokezelo
             }
         }
 
+        static void Modify()
+        {
+            //H5!?mekKQ+ fasz ciganyok@gmail.com github
+            //H5!?mekKQ+g fasz1 ciganyok@gmail.com githubb
+
+            Console.WriteLine("Please enter a number what you want to modify! 1: Username | 2: Email | 3: Website");
+
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(false);
+
+            switch (consoleKeyInfo.Key)
+            {
+                case ConsoleKey.D1:
+                    Console.Clear();
+                    NewUsername();                                        
+                    break;
+                case ConsoleKey.D2:
+                    Console.Clear();
+                    NewEmail();
+                    break;
+                case ConsoleKey.D3:
+                    Console.Clear();
+                    NewWebsite();
+                    break;
+            }
+        }
+
+        static void NewWebsite()
+        {
+            Console.Write("Please enter the password combination you want to modify! ");
+            string password = Console.ReadLine();
+
+            Console.Write("Please enter the new wewbsite: ");
+            string newWebsite = Console.ReadLine();
+
+            StreamWriter sw = new StreamWriter("n.txt", false);
+
+            for (int i = 0; i < n; i++)
+            {
+                if (passwords1[i].password == password)
+                {
+                    passwords1[i].website = newWebsite;
+                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {newWebsite}");
+                }
+                else
+                {
+                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
+                }
+            }
+            sw.Close();
+            Main();
+        }
+
+        static void NewEmail()
+        {
+            Console.Write("Please enter the password combination you want to modify! ");
+            string password = Console.ReadLine();
+
+            Console.Write("Please enter the new email: ");
+            string newEmail = Console.ReadLine();
+
+            StreamWriter sw = new StreamWriter("n.txt", false);
+
+            for (int i = 0; i < n; i++)
+            {
+                if (passwords1[i].password == password)
+                {
+                    passwords1[i].email = newEmail;
+                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {newEmail} {passwords1[i].website}");
+                }
+                else
+                {
+                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
+                }
+            }
+            sw.Close();
+            Main();
+        }
+
+        static void NewUsername()
+        {
+            Console.Write("Please enter the password combination you want to modify! ");
+            string password = Console.ReadLine();
+
+            Console.Write("Please enter the new username: ");
+            string newUsername = Console.ReadLine();            
+
+            StreamWriter sw = new StreamWriter("n.txt", false);
+
+            for (int i = 0; i < n ; i++)
+            {
+                if (passwords1[i].password == password)
+                {
+                    passwords1[i].username = newUsername;
+                    sw.WriteLine($"{passwords1[i].password} {newUsername} {passwords1[i].email} {passwords1[i].website}");
+                }                
+                else
+                {
+                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
+                }
+            }             
+            sw.Close();
+            Main();                      
+        }
+        
         static void Delete()
         {
             Console.WriteLine("Please enter the password combination you want to delete!");
