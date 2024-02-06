@@ -108,18 +108,22 @@ namespace jelszokezelo
                         if (byte.TryParse(chars[index], out szamE))
                             pass += chars[index];
                     }
-                    Console.Write($"{lengthIndex + 1}. helyen : Egy szám a jelszó {lengthIndex}. indexén ");
+                    //Console.Write($"{lengthIndex + 1}. helyen : Egy szám a jelszó {lengthIndex}. indexén ");
                 }
                 else //amennyiben nem a fix szám indexén van, akkor hozzáadja az aktuális karaktert a jelszóhoz
                     pass += chars[index];
 
-                Console.WriteLine($"{i + 1}. Karakter: {chars[index]}");
+                //Console.WriteLine($"{i + 1}. Karakter: {chars[index]}");
             }
 
             Console.WriteLine();
-            Console.WriteLine($"Jelszó: {pass} ({passLength} karakter hosszú)");
+            Console.Write($"Jelszó: ");
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write($"{pass}");
+            Console.ResetColor();
 
-            Console.WriteLine($"length random indexe: {lengthIndex}");
+            //Console.WriteLine($"length random indexe: {lengthIndex}");
             Console.WriteLine();
         }
 
@@ -220,11 +224,6 @@ namespace jelszokezelo
             sr1.Close();            
         }
 
-        static void LoadArray(string file)
-        {
-            
-        }
-
         static void Query()
         {
             Load("n.txt");
@@ -233,9 +232,8 @@ namespace jelszokezelo
             Console.WriteLine("Saved passwords from: ");
 
             foreach (Passwords item in passwords)
-            {
                 Console.WriteLine(item.website);
-            }
+
             Console.WriteLine();
             Console.Write("Enter website name to show password, delete or modify: ");
             string input = Console.ReadLine();
@@ -264,14 +262,13 @@ namespace jelszokezelo
 
         static void Manipulate()
         {
-            Console.WriteLine("Options: \t | M: Modify password | D: Delete Password | ESC: Menu");
+            Console.WriteLine("Options: \t | M: Modify Query | D: Delete Query | ESC: Menu");
 
-            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(false);
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
             switch (consoleKeyInfo.Key)
             {
-                case ConsoleKey.M: //későbbi feature
-                    Console.Clear();
+                case ConsoleKey.M:
                     Modify();
                     break;
                 case ConsoleKey.D:
@@ -287,25 +284,22 @@ namespace jelszokezelo
 
         static void Modify()
         {
-            //H5!?mekKQ+ fasz ciganyok@gmail.com github
-            //H5!?mekKQ+g fasz1 ciganyok@gmail.com githubb
-
             Console.WriteLine("Please enter a number what you want to modify! 1: Username | 2: Email | 3: Website");
 
-            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(false);
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
             switch (consoleKeyInfo.Key)
             {
+                case ConsoleKey.NumPad1:
                 case ConsoleKey.D1:
-                    Console.Clear();
                     NewUsername();                                        
                     break;
+                case ConsoleKey.NumPad2:
                 case ConsoleKey.D2:
-                    Console.Clear();
                     NewEmail();
                     break;
+                case ConsoleKey.NumPad3:
                 case ConsoleKey.D3:
-                    Console.Clear();
                     NewWebsite();
                     break;
             }
@@ -313,7 +307,7 @@ namespace jelszokezelo
 
         static void NewWebsite()
         {
-            Console.Write("Please enter the password combination you want to modify! ");
+            Console.Write("Please enter the password combination of the query! ");
             string password = Console.ReadLine();
 
             Console.Write("Please enter the new wewbsite: ");
@@ -329,9 +323,7 @@ namespace jelszokezelo
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {newWebsite}");
                 }
                 else
-                {
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
-                }
             }
             sw.Close();
             Main();
@@ -339,7 +331,7 @@ namespace jelszokezelo
 
         static void NewEmail()
         {
-            Console.Write("Please enter the password combination you want to modify! ");
+            Console.Write("Please enter the password combination of the query! ");
             string password = Console.ReadLine();
 
             Console.Write("Please enter the new email: ");
@@ -355,9 +347,7 @@ namespace jelszokezelo
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {newEmail} {passwords1[i].website}");
                 }
                 else
-                {
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
-                }
             }
             sw.Close();
             Main();
@@ -365,7 +355,7 @@ namespace jelszokezelo
 
         static void NewUsername()
         {
-            Console.Write("Please enter the password combination you want to modify! ");
+            Console.Write("Please enter the password combination of the query! ");
             string password = Console.ReadLine();
 
             Console.Write("Please enter the new username: ");
@@ -381,9 +371,7 @@ namespace jelszokezelo
                     sw.WriteLine($"{passwords1[i].password} {newUsername} {passwords1[i].email} {passwords1[i].website}");
                 }                
                 else
-                {
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
-                }
             }             
             sw.Close();
             Main();                      
@@ -391,7 +379,7 @@ namespace jelszokezelo
         
         static void Delete()
         {
-            Console.WriteLine("Please enter the password combination you want to delete!");
+            Console.WriteLine("Please enter the password combination you want to delete from the query!");
             string pass = Console.ReadLine();
 
             bool found = false;
@@ -406,9 +394,7 @@ namespace jelszokezelo
                     found = true;
 
                     foreach (Passwords item1 in passwords)
-                    {
-                        sw.WriteLine($"{item1.password} {item1.username} {item1.email} {item1.website}");
-                    }                  
+                        sw.WriteLine($"{item1.password} {item1.username} {item1.email} {item1.website}");                 
 
                     sw.Close();
 
