@@ -331,6 +331,7 @@ namespace jelszokezelo
                     Delete();
                     break;
                 case ConsoleKey.Escape: //itt is fos valamiért és az első 2 betűt nem iratja ki az optionsból
+                    Console.Clear();
                     Menu();
                     break;
                 default:
