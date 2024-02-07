@@ -18,8 +18,10 @@ namespace jelszokezelo
         static int index = 0; //random választott betűk indexe
 
         //jelszó random indexének eltárolására felvett változó (random szám a <LengthIndexGenerator()> függvényből)
-        static int lengthIndex = 0;
-
+        static int numberIndex = 0;
+        static int lowerCaseIndex = 0;
+        static int upperCaseIndex = 0;
+        static int specialCharacterIndex = 0;
         //jelszó karakterszámának eltárolására felvett változó
         static byte passLength = 0;
 
@@ -100,7 +102,7 @@ namespace jelszokezelo
             {
                 Random r = new Random();
                 index = r.Next(0, chars.Count()); //0 és a karakterek száma közt dob egy random számot
-                if (i == lengthIndex) //ha a fix szám indexére jutott akkor...
+                if (i == numberIndex) //ha a fix szám indexére jutott akkor...
                 {
                     while (!byte.TryParse(chars[index], out szamE)) //megnézi, hogy a legutóbbi random karakter szám-e és ha nem...
                     {
@@ -113,6 +115,41 @@ namespace jelszokezelo
                 else //amennyiben nem a fix szám indexén van, akkor hozzáadja az aktuális karaktert a jelszóhoz
                     pass += chars[index];
 
+                if (i == lowerCaseIndex)
+                {
+                    while (!chars[index].Any(char.IsLower))
+                    {
+                        index = r.Next(0, chars.Count());
+                        if (chars[index].Any(char.IsLower))
+                        {
+                            pass += chars[index];
+                        }
+                    }
+                }
+
+                if (i == upperCaseIndex)
+                {
+                    while (!chars[index].Any(char.IsUpper))
+                    {
+                        index = r.Next(0, chars.Count());
+                        if (chars[index].Any(char.IsUpper))
+                        {
+                            pass += chars[index];
+                        }
+                    }
+                }
+
+                if (i == specialCharacterIndex)
+                {
+                    while (chars[index].Any(char.IsLetter))
+                    {
+                        index = r.Next(0, chars.Count());
+                        if (!chars[index].Any(char.IsLetter))
+                        {
+                            pass += chars[index];
+                        }
+                    }
+                }
                 //Console.WriteLine($"{i + 1}. Karakter: {chars[index]}");
             }
 
@@ -123,14 +160,33 @@ namespace jelszokezelo
             Console.Write($"{pass}");
             Console.ResetColor();
 
-            //Console.WriteLine($"length random indexe: {lengthIndex}");
+            //Console.WriteLine($"Number random indexe: {numberIndex}");
+            //Console.WriteLine($"Lowercase random indexe: {lowerCaseIndex}");
+            //Console.WriteLine($"Uppercase random indexe: {upperCaseIndex}");
+            //Console.WriteLine($"Special Character indexe: {specialCharacterIndex}");
             Console.WriteLine();
         }
+        
 
         static void LengthIndexGenerator() //Generál egy FIX pozíciót egy szám karakternek
         {
             Random r = new Random();
-            lengthIndex = r.Next(1, passLength);
+            numberIndex = r.Next(1, passLength);
+            lowerCaseIndex = r.Next(1, passLength);
+            upperCaseIndex = r.Next(1, passLength);
+            specialCharacterIndex = r.Next(1, passLength);
+            while (numberIndex == lowerCaseIndex)
+            {
+                lowerCaseIndex = r.Next(1, passLength);
+            }
+            while (upperCaseIndex == lowerCaseIndex || upperCaseIndex == numberIndex)
+            {
+                upperCaseIndex = r.Next(1, passLength);
+            }
+            while (specialCharacterIndex == lowerCaseIndex || specialCharacterIndex == upperCaseIndex || specialCharacterIndex == numberIndex)
+            {
+
+            }
         }
 
         static void Save() //Jelszó mentése egy txt fájlba
