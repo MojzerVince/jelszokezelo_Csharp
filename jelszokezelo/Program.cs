@@ -185,7 +185,7 @@ namespace jelszokezelo
             }
             while (specialCharacterIndex == lowerCaseIndex || specialCharacterIndex == upperCaseIndex || specialCharacterIndex == numberIndex)
             {
-
+                specialCharacterIndex = r.Next(1, passLength);
             }
         }
 
