@@ -10,9 +10,10 @@ namespace jelszokezelo
     internal class Program
     {
         static List<Passwords> passwords = new List<Passwords>();
+        static List<Translate> tranlate = new List<Translate>();
         static int n = 0;
         static int c = 0;
-        static Passwords[] passwords1 = new Passwords[50];        
+        static Passwords[] passwords1 = new Passwords[50];
 
         static string[] chars = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "!", "@", "#", "$", "%", "&", "*", "(", ")", "_", "+", "-", "=", "{", "}", "[", "]", ":", ";", "'", "<", ">", ",", ".", "?", "/", "|" };
         static int index = 0; //random választott betűk indexe
@@ -29,6 +30,8 @@ namespace jelszokezelo
 
         static void Main()
         {
+            Characters();
+            LoadTranslateList("trans.txt");
             Load("n.txt"); //mentett jelszavak betöltése
             Menu(); //menükód bekérése
         }
@@ -166,7 +169,7 @@ namespace jelszokezelo
             //Console.WriteLine($"Special Character indexe: {specialCharacterIndex}");
             Console.WriteLine();
         }
-        
+
 
         static void LengthIndexGenerator() //Generál egy FIX pozíciót egy szám karakternek
         {
@@ -233,7 +236,7 @@ namespace jelszokezelo
         }
 
         static void Load(string file)
-        {            
+        {
             passwords.Clear();
             n = 0;
 
@@ -265,7 +268,7 @@ namespace jelszokezelo
             {
                 string row = sr1.ReadLine();
                 string[] data = row.Split(" ");
-                
+
                 try //megnézi, hogy beolvashatóak-e az adatok
                 {
                     passwords1[n].password = data[0];
@@ -276,8 +279,8 @@ namespace jelszokezelo
                     n++;
                 }
                 catch { } //ha nem, akkor nem csinál semmit xd
-            }            
-            sr1.Close();            
+            }
+            sr1.Close();
         }
 
         static void Query()
@@ -349,7 +352,7 @@ namespace jelszokezelo
             {
                 case ConsoleKey.NumPad1:
                 case ConsoleKey.D1:
-                    NewUsername();                                        
+                    NewUsername();
                     break;
                 case ConsoleKey.NumPad2:
                 case ConsoleKey.D2:
@@ -416,24 +419,24 @@ namespace jelszokezelo
             string password = Console.ReadLine();
 
             Console.Write("Please enter the new username: ");
-            string newUsername = Console.ReadLine();            
+            string newUsername = Console.ReadLine();
 
             StreamWriter sw = new StreamWriter("n.txt", false);
 
-            for (int i = 0; i < n ; i++)
+            for (int i = 0; i < n; i++)
             {
                 if (passwords1[i].password == password)
                 {
                     passwords1[i].username = newUsername;
                     sw.WriteLine($"{passwords1[i].password} {newUsername} {passwords1[i].email} {passwords1[i].website}");
-                }                
+                }
                 else
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
-            }             
+            }
             sw.Close();
-            Main();                      
+            Main();
         }
-        
+
         static void Delete()
         {
             Console.WriteLine("Please enter the password combination you want to delete from the query!");
@@ -451,7 +454,7 @@ namespace jelszokezelo
                     found = true;
 
                     foreach (Passwords item1 in passwords)
-                        sw.WriteLine($"{item1.password} {item1.username} {item1.email} {item1.website}");                 
+                        sw.WriteLine($"{item1.password} {item1.username} {item1.email} {item1.website}");
 
                     sw.Close();
 
@@ -461,10 +464,10 @@ namespace jelszokezelo
                     Console.WriteLine("Password successfully deleted!");
                     Console.ResetColor();
                     Menu();
-                }                
+                }
             }
 
-            if(!found) //ha nem találja a törlendő jelszót, akkor újra meg kell adni, ez amúgy egy végtelen ciklus
+            if (!found) //ha nem találja a törlendő jelszót, akkor újra meg kell adni, ez amúgy egy végtelen ciklus
             {
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.ForegroundColor = ConsoleColor.Black;
@@ -472,6 +475,45 @@ namespace jelszokezelo
                 Console.ResetColor();
                 Delete();
             }
+        }
+        static void Characters()
+        {
+            StreamWriter sw = new StreamWriter("trans.txt", false);
+            
+
+            for (int j = 0; j < chars.Length; j++)
+            {
+                Random r = new Random();
+                string randomCode = "";
+
+                while (randomCode.Count() < 5)
+                {
+                    index = r.Next(0, chars.Count());
+                    randomCode += chars[index];                    
+                }
+                sw.WriteLine($"{chars[j]} {randomCode}");
+
+            }
+            sw.Close();
+        }
+
+        static void LoadTranslateList(string file)
+        {
+            StreamReader sr = new StreamReader(file);
+
+            while (!sr.EndOfStream)
+            {
+                string row = sr.ReadLine();
+                string[] data = row.Split(" ");
+
+                Translate character = new Translate();
+
+                character.letter = data[0];
+                character.code = data[1];
+
+                tranlate.Add(character);
+            }
+            sr.Close();
         }
     }
 }
