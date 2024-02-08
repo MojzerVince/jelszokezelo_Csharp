@@ -10,8 +10,7 @@ namespace jelszokezelo
     internal class Program
     {
         static List<Passwords> passwords = new List<Passwords>();
-        static int n = 0;
-        static int c = 0;
+        static int n = 0;        
         static Passwords[] passwords1 = new Passwords[50];        
 
         static string[] chars = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "!", "@", "#", "$", "%", "&", "*", "(", ")", "_", "+", "-", "=", "{", "}", "[", "]", ":", ";", "'", "<", ">", ",", ".", "?", "/", "|" };
@@ -380,34 +379,39 @@ namespace jelszokezelo
         static void Delete()
         {
             Console.WriteLine("Please enter the password combination you want to delete from the query!");
-            string pass = Console.ReadLine();
+            string pass = Console.ReadLine();            
 
             bool found = false;
 
-            foreach (Passwords item in passwords)
-            {
-                if (item.password == pass) //végigmegy a tárolt jelszavakon és megnézi van-e egyezés
+            for (int i = 0; i < n ; i++) 
+            { 
+                if (passwords1[i].password == pass)
                 {
-                    passwords.Remove(item);
-
-                    StreamWriter sw = new StreamWriter("n.txt", false); //újraírja a fájlt
-                    found = true;
-
-                    foreach (Passwords item1 in passwords)
-                        sw.WriteLine($"{item1.password} {item1.username} {item1.email} {item1.website}");                 
-
-                    sw.Close();
-
-                    Console.Clear();
-                    Console.BackgroundColor = ConsoleColor.Green;
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.WriteLine("Password successfully deleted!");
-                    Console.ResetColor();
-                    Menu();
-                }                
+                    found = true;                    
+                    passwords.RemoveAt(i);
+                }
             }
 
-            if(!found) //ha nem találja a törlendő jelszót, akkor újra meg kell adni, ez amúgy egy végtelen ciklus
+            StreamWriter sw = new StreamWriter("n.txt", false); //újraírja a fájlt
+
+            foreach (Passwords item in passwords)
+            {                
+                sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");                               
+            }
+            sw.Close();
+
+            if (found)
+            {
+                Console.Clear();
+                Console.BackgroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine("Password successfully deleted!");
+                Console.ResetColor();
+                Main();
+                Console.WriteLine();  
+            }           
+            
+            if (!found) //ha nem találja a törlendő jelszót, akkor újra meg kell adni, ez amúgy egy végtelen ciklus
             {
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.ForegroundColor = ConsoleColor.Black;
