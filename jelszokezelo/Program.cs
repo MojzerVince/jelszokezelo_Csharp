@@ -246,12 +246,19 @@ namespace jelszokezelo
             {
                 string row = sr.ReadLine();
                 string[] data = row.Split(" ");
-
+                string jelszo = data[0];
                 Passwords pass = new Passwords();
 
                 try //megnézi, hogy beolvashatóak-e az adatok
                 {
-                    pass.password = data[0];
+                    foreach (Translate item in tranlate)
+                    {                       
+                        if (jelszo[0] == item.letter)
+                        {
+                            pass.password += item.letter;
+                        }
+                                               
+                    }                                       
                     pass.username = data[1];
                     pass.email = data[2];
                     pass.website = data[3];
