@@ -17,8 +17,10 @@ namespace jelszokezelo
         static int index = 0; //random választott betűk indexe
 
         //jelszó random indexének eltárolására felvett változó (random szám a <LengthIndexGenerator()> függvényből)
-        static int lengthIndex = 0;
-
+        static int numberIndex = 0;
+        static int lowerCaseIndex = 0;
+        static int upperCaseIndex = 0;
+        static int specialCharacterIndex = 0;
         //jelszó karakterszámának eltárolására felvett változó
         static byte passLength = 0;
 
@@ -30,7 +32,7 @@ namespace jelszokezelo
             Menu(); //menükód bekérése
         }
 
-        static void Menu()
+        static void Menu() //Menürendszer
         {
             Console.WriteLine("Options: \t | 0: Generate new password | 1: Show passwords | ESC: Exit");
 
@@ -60,6 +62,8 @@ namespace jelszokezelo
                     Modify();
                     break;
                 default:
+                    Console.Clear();
+                    Menu();
                     break;
             }
         }
@@ -99,7 +103,7 @@ namespace jelszokezelo
             {
                 Random r = new Random();
                 index = r.Next(0, chars.Count()); //0 és a karakterek száma közt dob egy random számot
-                if (i == lengthIndex) //ha a fix szám indexére jutott akkor...
+                if (i == numberIndex) //ha a fix szám indexére jutott akkor...
                 {
                     while (!byte.TryParse(chars[index], out szamE)) //megnézi, hogy a legutóbbi random karakter szám-e és ha nem...
                     {
@@ -112,6 +116,35 @@ namespace jelszokezelo
                 else //amennyiben nem a fix szám indexén van, akkor hozzáadja az aktuális karaktert a jelszóhoz
                     pass += chars[index];
 
+                if (i == lowerCaseIndex)
+                {
+                    while (!chars[index].Any(char.IsLower))
+                    {
+                        index = r.Next(0, chars.Count());
+                        if (chars[index].Any(char.IsLower))
+                            pass += chars[index];
+                    }
+                }
+
+                if (i == upperCaseIndex)
+                {
+                    while (!chars[index].Any(char.IsUpper))
+                    {
+                        index = r.Next(0, chars.Count());
+                        if (chars[index].Any(char.IsUpper))
+                            pass += chars[index];
+                    }
+                }
+
+                if (i == specialCharacterIndex)
+                {
+                    while (chars[index].Any(char.IsLetter))
+                    {
+                        index = r.Next(0, chars.Count());
+                        if (!chars[index].Any(char.IsLetter))
+                            pass += chars[index];
+                    }
+                }
                 //Console.WriteLine($"{i + 1}. Karakter: {chars[index]}");
             }
 
@@ -122,14 +155,27 @@ namespace jelszokezelo
             Console.Write($"{pass}");
             Console.ResetColor();
 
-            //Console.WriteLine($"length random indexe: {lengthIndex}");
+            //Console.WriteLine($"Number random indexe: {numberIndex}");
+            //Console.WriteLine($"Lowercase random indexe: {lowerCaseIndex}");
+            //Console.WriteLine($"Uppercase random indexe: {upperCaseIndex}");
+            //Console.WriteLine($"Special Character indexe: {specialCharacterIndex}");
             Console.WriteLine();
         }
-
+        
         static void LengthIndexGenerator() //Generál egy FIX pozíciót egy szám karakternek
         {
             Random r = new Random();
-            lengthIndex = r.Next(1, passLength);
+            numberIndex = r.Next(1, passLength);
+            lowerCaseIndex = r.Next(1, passLength);
+            upperCaseIndex = r.Next(1, passLength);
+            specialCharacterIndex = r.Next(1, passLength);
+
+            while (numberIndex == lowerCaseIndex)
+                lowerCaseIndex = r.Next(1, passLength);
+            while (upperCaseIndex == lowerCaseIndex || upperCaseIndex == numberIndex)
+                upperCaseIndex = r.Next(1, passLength);
+            while (specialCharacterIndex == lowerCaseIndex || specialCharacterIndex == upperCaseIndex || specialCharacterIndex == numberIndex)
+                specialCharacterIndex = r.Next(1, passLength);
         }
 
         static void Save() //Jelszó mentése egy txt fájlba
@@ -140,25 +186,36 @@ namespace jelszokezelo
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
+            string usern;
+            string email;
+            string website;
+
             switch (consoleKeyInfo.Key)
             {
                 case ConsoleKey.Y:
                     Console.Clear();
-                    Console.Write("Username: ");
-                    string usern = Console.ReadLine();
-
-                    Console.Write("Email: ");
-                    string email = Console.ReadLine();
-
-                    Console.Write("Website: ");
-                    string website = Console.ReadLine();
+                    do
+                    {
+                        Console.Write("Username: ");
+                        usern = Console.ReadLine();
+                    } while (usern == "");
+                    do
+                    {
+                        Console.Write("Email: ");
+                        email = Console.ReadLine();
+                    } while (email == "");
+                    do
+                    {
+                        Console.Write("Website: ");
+                        website = Console.ReadLine();
+                    } while (website == "");
 
                     sw.WriteLine($"{pass} {usern} {email} {website}");
                     sw.Close();
 
                     Console.Clear();
                     Console.WriteLine("Password saved");
-                    pass = "";
+                    pass = ""; //változó reset       
                     break;
                 case ConsoleKey.N:
                     Console.WriteLine("Exiting...");
@@ -175,7 +232,7 @@ namespace jelszokezelo
             }
         }
 
-        static void Load(string file)
+        static void Load(string file) //Jelszavak betöltése
         {            
             passwords.Clear();
             n = 0;
@@ -223,7 +280,7 @@ namespace jelszokezelo
             sr1.Close();            
         }
 
-        static void Query()
+        static void Query() //Jelszavak kiíratása
         {
             Load("n.txt");
             bool exist = false;
@@ -234,32 +291,40 @@ namespace jelszokezelo
                 Console.WriteLine(item.website);
 
             Console.WriteLine();
-            Console.Write("Enter website name to show password, delete or modify: ");
+            Console.Write("Enter website name to show password, delete or modify, R to return: ");
             string input = Console.ReadLine();
 
-            Console.Clear();
-            foreach (Passwords item in passwords)
-            {
-                if (item.website == input)
-                {
-                    exist = true;
-                    Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {item.password} \n");
-                }
-            }
-
-            if (!exist)
+            if(input.ToLower() == "r")
             {
                 Console.Clear();
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.WriteLine("Not valid query! Try again :(");
-                Console.ResetColor();
-                Query();
+                Menu();
             }
-            else Manipulate();
+            else
+            {
+                Console.Clear();
+                foreach (Passwords item in passwords)
+                {
+                    if (item.website == input)
+                    {
+                        exist = true;
+                        Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {item.password} \n");
+                    }
+                }
+
+                if (!exist)
+                {
+                    Console.Clear();
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine("Not valid query! Try again :(");
+                    Console.ResetColor();
+                    Query();
+                }
+                else Manipulate();
+            }            
         }
 
-        static void Manipulate()
+        static void Manipulate() //Jelszavak módosítására lehetőség
         {
             Console.WriteLine("Options: \t | M: Modify Query | D: Delete Query | ESC: Menu");
 
@@ -273,15 +338,14 @@ namespace jelszokezelo
                 case ConsoleKey.D:
                     Delete();
                     break;
-                case ConsoleKey.Escape: //itt is fos valamiért és az első 2 betűt nem iratja ki az optionsból
+                case ConsoleKey.Escape:
+                    Console.Clear();
                     Menu();
-                    break;
-                default:
                     break;
             }
         }
 
-        static void Modify()
+        static void Modify() //Jelszó módosítás
         {
             Console.WriteLine("Please enter a number what you want to modify! 1: Username | 2: Email | 3: Website");
 
@@ -300,6 +364,9 @@ namespace jelszokezelo
                 case ConsoleKey.NumPad3:
                 case ConsoleKey.D3:
                     NewWebsite();
+                    break;
+                default:
+                    Modify();
                     break;
             }
         }
@@ -376,7 +443,7 @@ namespace jelszokezelo
             Main();                      
         }
         
-        static void Delete()
+        static void Delete() //Jelszó adatok törlése
         {
             Console.WriteLine("Please enter the password combination you want to delete from the query!");
             string pass = Console.ReadLine();            
