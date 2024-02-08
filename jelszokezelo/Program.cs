@@ -15,7 +15,7 @@ namespace jelszokezelo
         static int c = 0;
         static Passwords[] passwords1 = new Passwords[50];
 
-        static string[] chars = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "!", "@", "#", "$", "%", "&", "*", "(", ")", "_", "+", "-", "=", "{", "}", "[", "]", ":", ";", "'", "<", ">", ",", ".", "?", "/", "|" };
+        static string[] chars = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "!", "@", "#", "$", "%", "&", "*", "(", ")", "_", "+", "-", "=", "{", "}", "[", "]", ":", ";", "'", "<", ">", ",", ".", "?", "/"};
         static int index = 0; //random választott betűk indexe
 
         //jelszó random indexének eltárolására felvett változó (random szám a <LengthIndexGenerator()> függvényből)
@@ -27,13 +27,14 @@ namespace jelszokezelo
         static byte passLength = 0;
 
         static string pass = ""; //jelszó változó
-
+        static string realpass = ""; //fordított jelszó 
         static void Main()
         {
-            Characters();
+            //Characters(); //legjobb ha töröljük de véletlen se nyúlunk hozzá 
             LoadTranslateList("trans.txt");
-            Load("n.txt"); //mentett jelszavak betöltése
+            Load("n.txt"); //mentett jelszavak betöltése            
             Menu(); //menükód bekérése
+            
         }
 
         static void Menu()
@@ -49,7 +50,8 @@ namespace jelszokezelo
                     Console.Clear();
                     Input();
                     LengthIndexGenerator();  //Erre az indexre tesz majd FIXEN egy számot
-                    Generator();             //jelszó generálása
+                    Generator();             //jelszó generálása                    
+                    Translator();
                     Save();                  //jelszó mentése egy txt fájlba
                     Menu();                  //navigálómenü
                     break;
@@ -168,8 +170,7 @@ namespace jelszokezelo
             //Console.WriteLine($"Uppercase random indexe: {upperCaseIndex}");
             //Console.WriteLine($"Special Character indexe: {specialCharacterIndex}");
             Console.WriteLine();
-        }
-
+        }        
 
         static void LengthIndexGenerator() //Generál egy FIX pozíciót egy szám karakternek
         {
@@ -199,11 +200,11 @@ namespace jelszokezelo
             StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz                            
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
-
             switch (consoleKeyInfo.Key)
             {
                 case ConsoleKey.Y:
                     Console.Clear();
+                                        
                     Console.Write("Username: ");
                     string usern = Console.ReadLine();
 
@@ -217,7 +218,7 @@ namespace jelszokezelo
                     sw.Close();
 
                     Console.Clear();
-                    Console.WriteLine("Password saved");
+                    Console.WriteLine("Password saved");                    
                     pass = "";
                     break;
                 case ConsoleKey.N:
@@ -235,37 +236,46 @@ namespace jelszokezelo
             }
         }
 
+        static void Translator()
+        {
+            string password = "";
+            for (int i = 0; i < pass.Length; i++)
+            {
+                foreach (Translate item in tranlate)
+                {
+                    if (item.letter.ToString() == pass[i].ToString())
+                    {
+                        password += item.code + "|";
+                    }
+                }
+            }
+            pass = password;
+        }
+                           
         static void Load(string file)
         {
             passwords.Clear();
-            n = 0;
+            n = 0;            
 
             StreamReader sr = new StreamReader(file);
 
             while (!sr.EndOfStream)
             {
                 string row = sr.ReadLine();
-                string[] data = row.Split(" ");
-                string jelszo = data[0];
+                string[] data = row.Split(" ");                
+                
                 Passwords pass = new Passwords();
 
                 try //megnézi, hogy beolvashatóak-e az adatok
-                {
-                    foreach (Translate item in tranlate)
-                    {                       
-                        if (jelszo[0] == item.letter)
-                        {
-                            pass.password += item.letter;
-                        }
-                                               
-                    }                                       
+                {                    
+                    pass.password = data[0];
                     pass.username = data[1];
                     pass.email = data[2];
-                    pass.website = data[3];
+                    pass.website = data[3];                    
 
-                    passwords.Add(pass);
+                    passwords.Add(pass);  
                 }
-                catch { } //ha nem, akkor nem csinál semmit xd
+                catch { } //ha nem, akkor nem csinál semmit xd*/
             }
             sr.Close();
 
@@ -274,7 +284,7 @@ namespace jelszokezelo
             while (!sr1.EndOfStream)
             {
                 string row = sr1.ReadLine();
-                string[] data = row.Split(" ");
+                string[] data = row.Split(" ");                
 
                 try //megnézi, hogy beolvashatóak-e az adatok
                 {
@@ -288,12 +298,14 @@ namespace jelszokezelo
                 catch { } //ha nem, akkor nem csinál semmit xd
             }
             sr1.Close();
+            Console.WriteLine();
         }
 
         static void Query()
         {
             Load("n.txt");
-            bool exist = false;
+            bool exist = false;            
+            string t_pass = "";
 
             Console.WriteLine("Saved passwords from: ");
 
@@ -302,15 +314,36 @@ namespace jelszokezelo
 
             Console.WriteLine();
             Console.Write("Enter website name to show password, delete or modify: ");
-            string input = Console.ReadLine();
-
+            string input = Console.ReadLine();                       
+            
+            foreach (Passwords item in passwords)
+            {               
+                if (input == item.website)
+                {
+                    string[] spliteltpass = item.password.Split("|");
+                    for (int i = 0; i < spliteltpass.Length; i++)                        
+                    {
+                        foreach (Translate item1 in tranlate)
+                        {
+                            if (item1.code.ToString() == spliteltpass[i].ToString())
+                            {
+                                t_pass += item1.letter;
+                            }
+                        }
+                    }
+                }
+                
+            }
+                        
             Console.Clear();
             foreach (Passwords item in passwords)
             {
                 if (item.website == input)
                 {
                     exist = true;
-                    Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {item.password} \n");
+                    Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {t_pass} \n");
+                    //t_pass = "";
+                    Console.WriteLine();
                 }
             }
 
@@ -451,27 +484,32 @@ namespace jelszokezelo
 
             bool found = false;
 
+            for (int i = 0; i < n; i++)
+            {
+                if (passwords1[i].password == pass)
+                {
+                    found = true;
+                    passwords.RemoveAt(i);
+                }
+            }
+
+            StreamWriter sw = new StreamWriter("n.txt", false); //újraírja a fájlt
+
             foreach (Passwords item in passwords)
             {
-                if (item.password == pass) //végigmegy a tárolt jelszavakon és megnézi van-e egyezés
-                {
-                    passwords.Remove(item);
+                sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");
+            }
+            sw.Close();
 
-                    StreamWriter sw = new StreamWriter("n.txt", false); //újraírja a fájlt
-                    found = true;
-
-                    foreach (Passwords item1 in passwords)
-                        sw.WriteLine($"{item1.password} {item1.username} {item1.email} {item1.website}");
-
-                    sw.Close();
-
-                    Console.Clear();
-                    Console.BackgroundColor = ConsoleColor.Green;
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.WriteLine("Password successfully deleted!");
-                    Console.ResetColor();
-                    Menu();
-                }
+            if (found)
+            {
+                Console.Clear();
+                Console.BackgroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine("Password successfully deleted!");
+                Console.ResetColor();
+                Main();
+                Console.WriteLine();
             }
 
             if (!found) //ha nem találja a törlendő jelszót, akkor újra meg kell adni, ez amúgy egy végtelen ciklus
@@ -506,6 +544,7 @@ namespace jelszokezelo
 
         static void LoadTranslateList(string file)
         {
+            tranlate.Clear();
             StreamReader sr = new StreamReader(file);
 
             while (!sr.EndOfStream)
