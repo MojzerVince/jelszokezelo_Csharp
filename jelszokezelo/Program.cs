@@ -44,9 +44,7 @@ namespace jelszokezelo
                 case ConsoleKey.D0:
                     Console.Clear();
                     Input();
-                    LengthIndexGenerator();  //Erre az indexre tesz majd FIXEN egy számot
-                    Generator();             //jelszó generálása
-                    Save();                  //jelszó mentése egy txt fájlba                //navigálómenü
+                    Save();                  //jelszó mentése egy txt fájlba
                     break;
                 case ConsoleKey.NumPad1:
                 case ConsoleKey.D1:
@@ -71,30 +69,76 @@ namespace jelszokezelo
         {
             bool legit = false;
 
-            while (!legit)
-                try
-                {
-                    Console.WriteLine("Passlength  between 8-20");
-                    Console.Write("Password Length: ");
-                    passLength = byte.Parse(Console.ReadLine()); //jelszó hosszúságának bekérése
-                    legit = true;
+            Console.WriteLine("What type of password you want to generate? \t 0: Password | 1: PIN | ESC: Back to menu");
 
-                    while (passLength < 8 || passLength > 20) //ha kisebb mint 8 vagy nagyobb mint 20 bekéri újra
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Please enter a pass length above 7 and below 21!");
-                        Console.Write("Password Length: ");
-                        passLength = byte.Parse(Console.ReadLine());
-                    }
-                }
-                catch
-                {
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+            switch (consoleKeyInfo.Key)
+            {
+                case ConsoleKey.NumPad0:
+                case ConsoleKey.D0:
+                    while (!legit)
+                        try
+                        {
+                            Console.WriteLine("Passlength  between 8-20");
+                            Console.Write("Password Length: ");
+                            passLength = byte.Parse(Console.ReadLine()); //jelszó hosszúságának bekérése
+                            legit = true;
+
+                            LengthIndexGenerator();  //Erre az indexre tesz majd FIXEN egy számot
+                            PassGenerator();             //jelszó generálása
+
+                            while (passLength < 8 || passLength > 20) //ha kisebb mint 8 vagy nagyobb mint 20 bekéri újra
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Please enter a pass length above 7 and below 21!");
+                                Console.Write("Password Length: ");
+                                passLength = byte.Parse(Console.ReadLine());
+                            }
+                        }
+                        catch
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Plese enter a number!");
+                        }
+                    break;
+                case ConsoleKey.NumPad1:
+                case ConsoleKey.D1:
+                    while (!legit)
+                        try
+                        {
+                            Console.WriteLine("PIN length  between 4-10");
+                            Console.Write("PIN Length: ");
+                            passLength = byte.Parse(Console.ReadLine());
+                            legit = true;
+
+                            PinGenerator();
+
+                            while (passLength < 4 || passLength > 10)
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Please enter a PIN length above 3 and below 11!");
+                                Console.Write("PIN Length: ");
+                                passLength = byte.Parse(Console.ReadLine());
+                            }
+                        }
+                        catch
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Plese enter a number!");
+                        }
+                    break;
+                case ConsoleKey.Escape:
                     Console.Clear();
-                    Console.WriteLine("Plese enter a number!");
-                }
+                    Menu();
+                    break;
+                default:
+                    Console.Clear();
+                    Input();
+                    break;
+            }            
         }
 
-        static void Generator() //Jelszó karaktereinek generálása
+        static void PassGenerator() //Jelszó karaktereinek generálása
         {
             byte szamE;
 
@@ -153,14 +197,32 @@ namespace jelszokezelo
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Write($"{pass}");
             Console.ResetColor();
+            Console.WriteLine();
 
             //Console.WriteLine($"Number random indexe: {numberIndex}");
             //Console.WriteLine($"Lowercase random indexe: {lowerCaseIndex}");
             //Console.WriteLine($"Uppercase random indexe: {upperCaseIndex}");
-            //Console.WriteLine($"Special Character indexe: {specialCharacterIndex}");
+            //Console.WriteLine($"Special Character indexe: {specialCharacterIndex            
+        }
+
+        static void PinGenerator()
+        {
+            for (int i = 0; i < passLength; i++)
+            {
+                Random r = new Random();
+
+                pass += r.Next(0, 9);
+            }
+
+            Console.WriteLine();
+            Console.Write($"PIN: ");
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write($"{pass}");
+            Console.ResetColor();
             Console.WriteLine();
         }
-        
+
         static void LengthIndexGenerator() //Generál egy FIX pozíciót egy szám karakternek
         {
             Random r = new Random();
