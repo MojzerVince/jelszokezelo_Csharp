@@ -46,8 +46,7 @@ namespace jelszokezelo
                     Input();
                     LengthIndexGenerator();  //Erre az indexre tesz majd FIXEN egy számot
                     Generator();             //jelszó generálása
-                    Save();                  //jelszó mentése egy txt fájlba
-                    Menu();                  //navigálómenü
+                    Save();                  //jelszó mentése egy txt fájlba                //navigálómenü
                     break;
                 case ConsoleKey.NumPad1:
                 case ConsoleKey.D1:
@@ -218,7 +217,6 @@ namespace jelszokezelo
                     pass = ""; //változó reset       
                     break;
                 case ConsoleKey.N:
-                    Console.WriteLine("Exiting...");
                     pass = ""; //törli a változó értékét
                     Console.Clear();
                     sw.Close(); //zárja a fájlt, különben nem tudná újra megnyitni
