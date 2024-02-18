@@ -17,10 +17,10 @@ namespace jelszokezelo
         static int index = 0; //random választott betűk indexe
 
         //jelszó random indexének eltárolására felvett változó (random szám a <LengthIndexGenerator()> függvényből)
-        static int numberIndex = 0;
+        /*static int numberIndex = 0;
         static int lowerCaseIndex = 0;
         static int upperCaseIndex = 0;
-        static int specialCharacterIndex = 0;
+        static int specialCharacterIndex = 0;*/
         //jelszó karakterszámának eltárolására felvett változó
         static byte passLength = 0;
 
@@ -84,7 +84,7 @@ namespace jelszokezelo
                             passLength = byte.Parse(Console.ReadLine()); //jelszó hosszúságának bekérése
                             legit = true;
 
-                            LengthIndexGenerator();  //Erre az indexre tesz majd FIXEN egy számot
+                            //LengthIndexGenerator();  //Erre az indexre tesz majd FIXEN egy számot
                             PassGenerator();             //jelszó generálása
 
                             while (passLength < 8 || passLength > 20) //ha kisebb mint 8 vagy nagyobb mint 20 bekéri újra
@@ -140,13 +140,13 @@ namespace jelszokezelo
 
         static void PassGenerator() //Jelszó karaktereinek generálása
         {
-            byte szamE;
+            //byte szamE;
 
             for (int i = 0; i < passLength; i++)
             {
                 Random r = new Random();
                 index = r.Next(0, chars.Count()); //0 és a karakterek száma közt dob egy random számot
-                if (i == numberIndex) //ha a fix szám indexére jutott akkor...
+                /*if (i == numberIndex) //ha a fix szám indexére jutott akkor...
                 {
                     while (!byte.TryParse(chars[index], out szamE)) //megnézi, hogy a legutóbbi random karakter szám-e és ha nem...
                     {
@@ -155,11 +155,8 @@ namespace jelszokezelo
                             pass += chars[index];
                     }
                     //Console.Write($"{lengthIndex + 1}. helyen : Egy szám a jelszó {lengthIndex}. indexén ");
-                }
-                else //amennyiben nem a fix szám indexén van, akkor hozzáadja az aktuális karaktert a jelszóhoz
-                    pass += chars[index];
-
-                if (i == lowerCaseIndex)
+                }*/              
+                /*else if (i == lowerCaseIndex)
                 {
                     while (!chars[index].Any(char.IsLower))
                     {
@@ -168,8 +165,7 @@ namespace jelszokezelo
                             pass += chars[index];
                     }
                 }
-
-                if (i == upperCaseIndex)
+                else if (i == upperCaseIndex)
                 {
                     while (!chars[index].Any(char.IsUpper))
                     {
@@ -178,8 +174,7 @@ namespace jelszokezelo
                             pass += chars[index];
                     }
                 }
-
-                if (i == specialCharacterIndex)
+                else if (i == specialCharacterIndex)
                 {
                     while (chars[index].Any(char.IsLetter))
                     {
@@ -187,22 +182,28 @@ namespace jelszokezelo
                         if (!chars[index].Any(char.IsLetter))
                             pass += chars[index];
                     }
-                }
+                }*/
+                //amennyiben nem a fix indexeken van, akkor hozzáadja az aktuális karaktert a jelszóhoz
+                pass += chars[index];
+
                 //Console.WriteLine($"{i + 1}. Karakter: {chars[index]}");
             }
 
             Console.WriteLine();
-            Console.Write($"Jelszó: ");
+            Console.Write($"Pass: ");
             Console.BackgroundColor = ConsoleColor.Green;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Write($"{pass}");
             Console.ResetColor();
             Console.WriteLine();
 
-            //Console.WriteLine($"Number random indexe: {numberIndex}");
-            //Console.WriteLine($"Lowercase random indexe: {lowerCaseIndex}");
-            //Console.WriteLine($"Uppercase random indexe: {upperCaseIndex}");
-            //Console.WriteLine($"Special Character indexe: {specialCharacterIndex            
+            /*Console.WriteLine($"Number random indexe: {numberIndex}");
+            Console.WriteLine($"Lowercase random indexe: {lowerCaseIndex}");
+            Console.WriteLine($"Uppercase random indexe: {upperCaseIndex}");
+            Console.WriteLine($"Special Character indexe: {specialCharacterIndex}");*/
+
+            //Console.WriteLine();
+            //Console.WriteLine(pass.Count());
         }
 
         static void PinGenerator()
@@ -223,7 +224,7 @@ namespace jelszokezelo
             Console.WriteLine();
         }
 
-        static void LengthIndexGenerator() //Generál egy FIX pozíciót egy szám karakternek
+        /*static void LengthIndexGenerator() //Generál egy FIX pozíciót egy szám karakternek
         {
             Random r = new Random();
             numberIndex = r.Next(1, passLength);
@@ -231,17 +232,17 @@ namespace jelszokezelo
             upperCaseIndex = r.Next(1, passLength);
             specialCharacterIndex = r.Next(1, passLength);
 
-            while (numberIndex == lowerCaseIndex)
+            while (specialCharacterIndex == lowerCaseIndex || specialCharacterIndex == upperCaseIndex || specialCharacterIndex == numberIndex)
                 lowerCaseIndex = r.Next(1, passLength);
-            while (upperCaseIndex == lowerCaseIndex || upperCaseIndex == numberIndex)
+            while (specialCharacterIndex == lowerCaseIndex || specialCharacterIndex == upperCaseIndex || specialCharacterIndex == numberIndex)
                 upperCaseIndex = r.Next(1, passLength);
             while (specialCharacterIndex == lowerCaseIndex || specialCharacterIndex == upperCaseIndex || specialCharacterIndex == numberIndex)
                 specialCharacterIndex = r.Next(1, passLength);
-        }
+        }*/
 
         static void Save() //Jelszó mentése egy txt fájlba
         {
-            Console.Write("Save Password? Y/N ");
+            Console.Write("Save Password? Y/N\n");
 
             StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz                            
 
@@ -285,7 +286,6 @@ namespace jelszokezelo
                     Menu();
                     break;
                 default:
-                    Console.Clear();
                     sw.Close();
                     Save();
                     break;
