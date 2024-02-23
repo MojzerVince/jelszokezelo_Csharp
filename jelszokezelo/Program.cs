@@ -34,7 +34,7 @@ namespace jelszokezelo
 
         static void Menu() //Menürendszer
         {
-            Console.WriteLine("Options: \t | 0: Generate new password | 1: Show passwords | ESC: Exit");
+            Console.WriteLine("Options: \t | 0: Generate new password | 1: Show passwords | 2: Add an existing password | ESC: Exit");
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
@@ -54,6 +54,9 @@ namespace jelszokezelo
                 case ConsoleKey.Escape:
                     Console.Clear();
                     Console.WriteLine("Exiting..."); //ha csak 1 E van, akkor valamiért fos
+                    break;
+                case ConsoleKey.D2:
+                    AddPass();
                     break;
                 case ConsoleKey.D3:
                     Modify();
@@ -240,6 +243,59 @@ namespace jelszokezelo
                 specialCharacterIndex = r.Next(1, passLength);
         }*/
 
+        static void AddPass()
+        {
+            StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz 
+
+            string usern;
+            string email;
+            string website;
+            string password;
+
+            do
+            {
+                Console.Write("Username: ");
+                usern = Console.ReadLine();
+            } while (usern == "");
+            do
+            {
+                Console.Write("Email: ");
+                email = Console.ReadLine();
+            } while (email == "");
+            do
+            {
+                Console.Write("Website: ");
+                website = Console.ReadLine();
+            } while (website == "");
+            do
+            {
+                Console.Write("Password: ");
+                password = Console.ReadLine();
+            } while (password == "");
+
+            Console.Write("Check it! Is it right? Y/N: ");
+
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+
+            switch (consoleKeyInfo.Key)
+            {
+                case ConsoleKey.Y:
+                    sw.WriteLine($"{password} {usern} {email} {website}");
+                    sw.Close();
+                    Menu();
+                    break;
+                case ConsoleKey.N:
+                    Console.Clear();
+                    sw.Close();
+                    AddPass();                                     
+                    break;
+            }
+            
+            sw.Close();
+
+            Console.Clear();
+            Console.WriteLine("Password saved");
+        }
         static void Save() //Jelszó mentése egy txt fájlba
         {
             Console.Write("Save Password? Y/N\n");
