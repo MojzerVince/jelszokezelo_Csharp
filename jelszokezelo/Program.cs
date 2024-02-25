@@ -273,7 +273,7 @@ namespace jelszokezelo
                 password = Console.ReadLine();
             } while (password == "");
 
-            Console.Write("Check it! Is it right? Y/N: ");
+            Console.WriteLine("Check it! Is it right? Want to save it? Y/N: ");
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
@@ -282,19 +282,20 @@ namespace jelszokezelo
                 case ConsoleKey.Y:
                     sw.WriteLine($"{password} {usern} {email} {website}");
                     sw.Close();
+                    Console.Clear();
+                    Console.WriteLine("Password saved");
                     Menu();
                     break;
                 case ConsoleKey.N:
                     Console.Clear();
                     sw.Close();
-                    AddPass();                                     
+                    Menu();                                     
                     break;
             }
             
             sw.Close();
 
-            Console.Clear();
-            Console.WriteLine("Password saved");
+            
         }
         static void Save() //Jelszó mentése egy txt fájlba
         {
