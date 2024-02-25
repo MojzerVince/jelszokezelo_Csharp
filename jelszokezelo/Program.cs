@@ -14,14 +14,8 @@ namespace jelszokezelo
         static Passwords[] passwords1 = new Passwords[50];        
 
         static string[] chars = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "!", "@", "#", "$", "%", "&", "*", "(", ")", "_", "+", "-", "=", "{", "}", "[", "]", ":", ";", "'", "<", ">", ",", ".", "?", "/", "|" };
-        static int index = 0; //random választott betűk indexe
+        static int index = 0; //random választott karakterek indexe
 
-        //jelszó random indexének eltárolására felvett változó (random szám a <LengthIndexGenerator()> függvényből)
-        /*static int numberIndex = 0;
-        static int lowerCaseIndex = 0;
-        static int upperCaseIndex = 0;
-        static int specialCharacterIndex = 0;*/
-        //jelszó karakterszámának eltárolására felvett változó
         static byte passLength = 0;
 
         static string pass = ""; //jelszó változó
@@ -34,7 +28,7 @@ namespace jelszokezelo
 
         static void Menu() //Menürendszer
         {
-            Console.WriteLine("Options: \t | 0: Generate new password | 1: Show passwords | 2: Add an existing password | ESC: Exit");
+            Console.WriteLine("Options:   | 0: Generate new password | 1: Show passwords | 2: Add an existing password | 3: Modify query | ESC: Exit");
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
@@ -55,10 +49,13 @@ namespace jelszokezelo
                     Console.Clear();
                     Console.WriteLine("Exiting..."); //ha csak 1 E van, akkor valamiért fos
                     break;
+                case ConsoleKey.NumPad2:
                 case ConsoleKey.D2:
                     AddPass();
                     break;
+                case ConsoleKey.NumPad3:
                 case ConsoleKey.D3:
+                    Query();
                     Modify();
                     break;
                 default:
@@ -149,44 +146,7 @@ namespace jelszokezelo
             {
                 Random r = new Random();
                 index = r.Next(0, chars.Count()); //0 és a karakterek száma közt dob egy random számot
-                /*if (i == numberIndex) //ha a fix szám indexére jutott akkor...
-                {
-                    while (!byte.TryParse(chars[index], out szamE)) //megnézi, hogy a legutóbbi random karakter szám-e és ha nem...
-                    {
-                        index = r.Next(0, chars.Count()); //akkor generál egy újabb karaktert, ameddig szám nem lesz
-                        if (byte.TryParse(chars[index], out szamE))
-                            pass += chars[index];
-                    }
-                    //Console.Write($"{lengthIndex + 1}. helyen : Egy szám a jelszó {lengthIndex}. indexén ");
-                }*/              
-                /*else if (i == lowerCaseIndex)
-                {
-                    while (!chars[index].Any(char.IsLower))
-                    {
-                        index = r.Next(0, chars.Count());
-                        if (chars[index].Any(char.IsLower))
-                            pass += chars[index];
-                    }
-                }
-                else if (i == upperCaseIndex)
-                {
-                    while (!chars[index].Any(char.IsUpper))
-                    {
-                        index = r.Next(0, chars.Count());
-                        if (chars[index].Any(char.IsUpper))
-                            pass += chars[index];
-                    }
-                }
-                else if (i == specialCharacterIndex)
-                {
-                    while (chars[index].Any(char.IsLetter))
-                    {
-                        index = r.Next(0, chars.Count());
-                        if (!chars[index].Any(char.IsLetter))
-                            pass += chars[index];
-                    }
-                }*/
-                //amennyiben nem a fix indexeken van, akkor hozzáadja az aktuális karaktert a jelszóhoz
+                
                 pass += chars[index];
 
                 //Console.WriteLine($"{i + 1}. Karakter: {chars[index]}");
@@ -209,7 +169,7 @@ namespace jelszokezelo
             //Console.WriteLine(pass.Count());
         }
 
-        static void PinGenerator()
+        static void PinGenerator() //PIN kód karakterek generálása
         {
             for (int i = 0; i < passLength; i++)
             {
@@ -227,23 +187,7 @@ namespace jelszokezelo
             Console.WriteLine();
         }
 
-        /*static void LengthIndexGenerator() //Generál egy FIX pozíciót egy szám karakternek
-        {
-            Random r = new Random();
-            numberIndex = r.Next(1, passLength);
-            lowerCaseIndex = r.Next(1, passLength);
-            upperCaseIndex = r.Next(1, passLength);
-            specialCharacterIndex = r.Next(1, passLength);
-
-            while (specialCharacterIndex == lowerCaseIndex || specialCharacterIndex == upperCaseIndex || specialCharacterIndex == numberIndex)
-                lowerCaseIndex = r.Next(1, passLength);
-            while (specialCharacterIndex == lowerCaseIndex || specialCharacterIndex == upperCaseIndex || specialCharacterIndex == numberIndex)
-                upperCaseIndex = r.Next(1, passLength);
-            while (specialCharacterIndex == lowerCaseIndex || specialCharacterIndex == upperCaseIndex || specialCharacterIndex == numberIndex)
-                specialCharacterIndex = r.Next(1, passLength);
-        }*/
-
-        static void AddPass()
+        static void AddPass() //Custom jelszó hozzáadás
         {
             StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz 
 
@@ -293,10 +237,9 @@ namespace jelszokezelo
                     break;
             }
             
-            sw.Close();
-
-            
+            sw.Close();            
         }
+
         static void Save() //Jelszó mentése egy txt fájlba
         {
             Console.Write("Save Password? Y/N\n");
@@ -493,7 +436,7 @@ namespace jelszokezelo
             Console.Write("Please enter the password combination of the query! ");
             string password = Console.ReadLine();
 
-            Console.Write("Please enter the new wewbsite: ");
+            Console.Write("Please enter the new website: ");
             string newWebsite = Console.ReadLine();
 
             StreamWriter sw = new StreamWriter("n.txt", false);
@@ -509,6 +452,7 @@ namespace jelszokezelo
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
             }
             sw.Close();
+            Console.Clear();
             Main();
         }
 
@@ -533,6 +477,7 @@ namespace jelszokezelo
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
             }
             sw.Close();
+            Console.Clear();
             Main();
         }
 
@@ -557,6 +502,7 @@ namespace jelszokezelo
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
             }             
             sw.Close();
+            Console.Clear();
             Main();                      
         }
         
