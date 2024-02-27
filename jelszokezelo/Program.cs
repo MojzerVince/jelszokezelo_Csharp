@@ -28,7 +28,7 @@ namespace jelszokezelo
 
         static void Menu() //Menürendszer
         {
-            Console.WriteLine("Options:   | 0: Generate new password | 1: Show passwords | 2: Add an existing password | 3: Modify query | ESC: Exit");
+            Console.WriteLine("Options:   | 0: Generate new password | 1: Show passwords | 2: Add an existing password | ESC: Exit");
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
@@ -52,11 +52,6 @@ namespace jelszokezelo
                 case ConsoleKey.NumPad2:
                 case ConsoleKey.D2:
                     AddPass();
-                    break;
-                case ConsoleKey.NumPad3:
-                case ConsoleKey.D3:
-                    Query();
-                    Modify();
                     break;
                 default:
                     Console.Clear();
@@ -227,7 +222,10 @@ namespace jelszokezelo
                     sw.WriteLine($"{password} {usern} {email} {website}");
                     sw.Close();
                     Console.Clear();
+                    Console.BackgroundColor= ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Black;
                     Console.WriteLine("Password saved");
+                    Console.ResetColor();
                     Menu();
                     break;
                 case ConsoleKey.N:
