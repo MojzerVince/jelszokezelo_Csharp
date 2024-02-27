@@ -456,16 +456,38 @@ namespace jelszokezelo
         static void NewUsername()
         {
             Console.Write("Please enter the password combination of the query! ");
-            string password = Console.ReadLine();
+            string website = Console.ReadLine();
+            string email = Console.ReadLine();
 
             Console.Write("Please enter the new username: ");
             string newUsername = Console.ReadLine();
+
+            string t_pass = "";
+
+            foreach (Passwords item in passwords)
+            {
+                if (item.website == website && item.email == email)
+                {
+                    string[] spliteltpass = item.password.Split("|");
+                    for (int i = 0; i < spliteltpass.Length; i++)
+                    {
+                        foreach (Translate item1 in tranlate)
+                        {
+                            if (item1.code.ToString() == spliteltpass[i].ToString())
+                            {
+                                t_pass += item1.letter;
+                            }
+                        }
+                    }
+                }
+
+            }
 
             StreamWriter sw = new StreamWriter("n.txt", false);
 
             for (int i = 0; i < n; i++)
             {
-                if (passwords1[i].password == password)
+                if (passwords1[i].password == t_pass)
                 {
                     passwords1[i].username = newUsername;
                     sw.WriteLine($"{passwords1[i].password} {newUsername} {passwords1[i].email} {passwords1[i].website}");
