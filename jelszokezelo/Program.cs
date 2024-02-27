@@ -226,7 +226,7 @@ namespace jelszokezelo
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.WriteLine("Password saved");
                     Console.ResetColor();
-                    Menu();
+                    Main();
                     break;
                 case ConsoleKey.N:
                     Console.Clear();
@@ -276,6 +276,7 @@ namespace jelszokezelo
                     Console.Clear();
                     Console.WriteLine("Password saved");
                     pass = ""; //változó reset       
+                    Main();
                     break;
                 case ConsoleKey.N:
                     pass = ""; //törli a változó értékét
