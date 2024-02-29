@@ -569,7 +569,7 @@ namespace jelszokezelo
                         {
                             if (item1.code.ToString() == spliteltpass[i].ToString())
                             {
-                                t_pass += item1.letter;
+                                t_pass += item1.code + "|";
                             }
                         }
                     }
@@ -578,8 +578,13 @@ namespace jelszokezelo
 
             StreamWriter sw = new StreamWriter("n.txt", false);
 
+            //;jdhkkSm(;C[MWt*#'9tEA=K#PNl%PC[MWt5S4K:EA=K#Aayx/
+            //;jdhk|kSm(;|C[MWt|*#'9t|EA=K#|PNl%P|C[MWt|5S4K:|EA=K#|Aayx/|
+
+
             for (int i = 0; i < n; i++)
             {
+                
                 if (passwords1[i].password == t_pass)
                 {
                     passwords1[i].username = newUsername;
@@ -589,9 +594,10 @@ namespace jelszokezelo
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
             }
             sw.Close();
-
+            Console.WriteLine();
+            Console.WriteLine();
             Console.Clear();
-            Main();                      
+            Main();
         }
         
         static void Delete() //Jelszó adatok törlése
