@@ -10,7 +10,7 @@ namespace jelszokezelo
     {
         public string username;
         public string email;
-        public string password;
-        public string website;
+        public string password;        
+        public string website;        
     }
 }
