@@ -310,7 +310,24 @@ namespace jelszokezelo
             }
             pass = password;
         }
-                           
+
+        static void LoadTranslateList(string file)
+        {
+            tranlate.Clear();
+            StreamReader sr = new StreamReader(file);
+
+            while (!sr.EndOfStream)
+            {
+                string row = sr.ReadLine();
+                string[] data = row.Split(" ");
+                Translate character = new Translate();
+                character.letter = data[0];
+                character.code = data[1];
+                tranlate.Add(character);
+            }
+            sr.Close();
+        }
+
         static void Load(string file) //Jelszavak betöltése
         {
             passwords.Clear();
@@ -421,17 +438,16 @@ namespace jelszokezelo
                 }
             }            
 
-                if (!exist)
-                {
-                    Console.Clear();
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.WriteLine("Not valid query! Try again :(");
-                    Console.ResetColor();
-                    Query();
-                }
-                else Manipulate();
-            }            
+            if (!exist)
+            {
+                Console.Clear();
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine("Not valid query! Try again :(");
+                Console.ResetColor();
+                Query();
+            }
+            else Manipulate();          
         }
 
         static void Manipulate() //Jelszavak módosítására lehetőség
@@ -558,7 +574,6 @@ namespace jelszokezelo
                         }
                     }
                 }
-
             }
 
             StreamWriter sw = new StreamWriter("n.txt", false);
@@ -624,7 +639,7 @@ namespace jelszokezelo
             sw.Close();
         }
   
-        static void Characters()
+        /*static void Characters()
         {
             StreamWriter sw = new StreamWriter("trans.txt", false);
             
@@ -641,26 +656,6 @@ namespace jelszokezelo
                 sw.WriteLine($"{chars[j]} {randomCode}");
             }
             sw.Close();
-        }
-
-        static void LoadTranslateList(string file)
-        {
-            tranlate.Clear();
-            StreamReader sr = new StreamReader(file);
-
-            while (!sr.EndOfStream)
-            {
-                string row = sr.ReadLine();
-                string[] data = row.Split(" ");
-
-                Translate character = new Translate();
-
-                character.letter = data[0];
-                character.code = data[1];
-
-                tranlate.Add(character);
-            }
-            sr.Close();
-        }
+        }*/
     }
 }
