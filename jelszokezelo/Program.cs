@@ -569,10 +569,13 @@ namespace jelszokezelo
         static void FileDelete(string file) //DEBUG ONLY, fájltörlés
         {
             File.Delete(file);
+            Console.Clear();
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.Green;
-            Console.WriteLine("File Deleted");
+            Console.WriteLine("Password File Deleted!");
             Console.ResetColor();
+
+            Menu();
         }
     }
 }
