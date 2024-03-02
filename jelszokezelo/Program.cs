@@ -24,7 +24,8 @@ namespace jelszokezelo
         static bool DEBUG = true; //Kiadásnál át kell rakni false-ra és minden debug funkció kikapcsol majd
 
         static void Main()
-        {         
+        {
+            CheckForFile("n.txt");
             Load("n.txt"); //mentett jelszavak betöltése
             Menu(); //menükód bekérése
         }
@@ -566,6 +567,15 @@ namespace jelszokezelo
             }
         }
     
+        static void CheckForFile(string file)
+        {
+            if (!File.Exists(file))
+            {
+                FileStream fs = File.Create("n.txt");
+                fs.Close();
+            }
+        }
+        
         static void FileDelete(string file) //DEBUG ONLY, fájltörlés
         {
             File.Delete(file);
