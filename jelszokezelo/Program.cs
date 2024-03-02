@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Xml.Linq;
@@ -20,8 +21,11 @@ namespace jelszokezelo
 
         static string pass = ""; //jelszó változó
 
+        static bool DEBUG = true; //Kiadásnál át kell rakni false-ra és minden debug funkció kikapcsol majd
+
         static void Main()
         {
+            CheckForFile("n.txt");
             Load("n.txt"); //mentett jelszavak betöltése
             Menu(); //menükód bekérése
         }
@@ -30,33 +34,46 @@ namespace jelszokezelo
         {
             Console.WriteLine("Options:   | 0: Generate new password | 1: Show passwords | 2: Add an existing password | ESC: Exit");
 
-            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);            
 
-            switch (consoleKeyInfo.Key)
+            if (DEBUG) //DEBUG FEATURE-ÖK
             {
-                case ConsoleKey.NumPad0:
-                case ConsoleKey.D0:
-                    Console.Clear();
-                    Input();
-                    Save();                  //jelszó mentése egy txt fájlba
-                    break;
-                case ConsoleKey.NumPad1:
-                case ConsoleKey.D1:
-                    Console.Clear();
-                    Query();                 //Jelszólekérés
-                    break;
-                case ConsoleKey.Escape:
-                    Console.Clear();
-                    Console.WriteLine("Exiting..."); //ha csak 1 E van, akkor valamiért fos
-                    break;
-                case ConsoleKey.NumPad2:
-                case ConsoleKey.D2:
-                    AddPass();
-                    break;
-                default:
-                    Console.Clear();
-                    Menu();
-                    break;
+                switch (consoleKeyInfo.Key)
+                {
+                    case ConsoleKey.NumPad9:
+                    case ConsoleKey.D9: //DEBUG ONLY
+                        FileDelete("n.txt");
+                        break;
+                }
+            }
+            else
+            {
+                switch (consoleKeyInfo.Key)
+                {
+                    case ConsoleKey.NumPad0:
+                    case ConsoleKey.D0:
+                        Console.Clear();
+                        Input();
+                        Save();                  //jelszó mentése egy txt fájlba
+                        break;
+                    case ConsoleKey.NumPad1:
+                    case ConsoleKey.D1:
+                        Console.Clear();
+                        Query();                 //Jelszólekérés
+                        break;
+                    case ConsoleKey.Escape:
+                        Console.Clear();
+                        Console.WriteLine("Exiting..."); //ha csak 1 E van, akkor valamiért fos
+                        break;
+                    case ConsoleKey.NumPad2:
+                    case ConsoleKey.D2:
+                        AddPass();
+                        break;
+                    default:
+                        Console.Clear();
+                        Menu();
+                        break;
+                }
             }
         }
 
@@ -548,6 +565,27 @@ namespace jelszokezelo
                 Console.ResetColor();
                 Delete();
             }
+        }
+    
+        static void CheckForFile(string file)
+        {
+            if (!File.Exists(file))
+            {
+                FileStream fs = File.Create("n.txt");
+                fs.Close();
+            }
+        }
+        
+        static void FileDelete(string file) //DEBUG ONLY, fájltörlés
+        {
+            File.Delete(file);
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.WriteLine("Password File Deleted!");
+            Console.ResetColor();
+
+            Menu();
         }
     }
 }
