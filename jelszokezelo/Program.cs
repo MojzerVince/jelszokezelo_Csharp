@@ -644,16 +644,38 @@ namespace jelszokezelo
             Main();
         }
         
-        static void Delete() //Jelszó adatok törlése
+        static void Delete() //Jelszó adatok törlése  
         {
-            Console.WriteLine("Please enter the password combination you want to delete from the query!");
-            string pass = Console.ReadLine();            
+            Console.Write("Please enter the website of the query! ");
+            string website = Console.ReadLine();
+            Console.WriteLine("Please enter the email of the query!");
+            string email = Console.ReadLine();
+
+            string t_pass = "";
+
+            foreach (Passwords item in passwords)
+            {
+                if (item.website == website && item.email == email)
+                {
+                    string[] spliteltpass = item.password.Split("|");
+                    for (int i = 0; i < spliteltpass.Length; i++)
+                    {
+                        foreach (Translate item1 in tranlate)
+                        {
+                            if (item1.code.ToString() == spliteltpass[i].ToString())
+                            {
+                                t_pass += item1.code + "|";
+                            }
+                        }
+                    }
+                }
+            }
 
             bool found = false;
-
+             
             for (int i = 0; i < n ; i++) 
             { 
-                if (passwords1[i].password == pass)
+                if (passwords1[i].password == t_pass)
                 {
                     found = true;                    
                     passwords.RemoveAt(i);
@@ -666,6 +688,7 @@ namespace jelszokezelo
             {                
                 sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");                               
             }
+            sw.Close();
 
             if (found)
             {
@@ -686,7 +709,7 @@ namespace jelszokezelo
                 Console.ResetColor();
                 Delete();
             }
-            sw.Close();
+            
         }
   
         /*static void Characters()
