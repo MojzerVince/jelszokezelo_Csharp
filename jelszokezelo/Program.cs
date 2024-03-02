@@ -374,7 +374,6 @@ namespace jelszokezelo
                 catch { } //ha nem, akkor nem csinál semmit xd
             }
             sr1.Close();
-            Console.WriteLine();
         }
 
         static void Query() //Jelszavak kiíratása
@@ -499,17 +498,39 @@ namespace jelszokezelo
 
         static void NewWebsite()
         {
-            Console.Write("Please enter the password combination of the query! ");
-            string password = Console.ReadLine();
+            Console.Write("Please enter the website of the query! ");
+            string website = Console.ReadLine();
+            Console.WriteLine("Please enter the email of the query!");
+            string email = Console.ReadLine();
 
             Console.Write("Please enter the new website: ");
             string newWebsite = Console.ReadLine();
+
+            string t_pass = "";
+
+            foreach (Passwords item in passwords)
+            {
+                if (item.website == website && item.email == email)
+                {
+                    string[] spliteltpass = item.password.Split("|");
+                    for (int i = 0; i < spliteltpass.Length; i++)
+                    {
+                        foreach (Translate item1 in tranlate)
+                        {
+                            if (item1.code.ToString() == spliteltpass[i].ToString())
+                            {
+                                t_pass += item1.code + "|";
+                            }
+                        }
+                    }
+                }
+            }
 
             StreamWriter sw = new StreamWriter("n.txt", false);
 
             for (int i = 0; i < n; i++)
             {
-                if (passwords1[i].password == password)
+                if (passwords1[i].password == t_pass)
                 {
                     passwords1[i].website = newWebsite;
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {newWebsite}");
@@ -524,17 +545,39 @@ namespace jelszokezelo
 
         static void NewEmail()
         {
-            Console.Write("Please enter the password combination of the query! ");
-            string password = Console.ReadLine();
+            Console.Write("Please enter the website of the query! ");
+            string website = Console.ReadLine();
+            Console.WriteLine("Please enter the email of the query!");
+            string email = Console.ReadLine();
 
             Console.Write("Please enter the new email: ");
             string newEmail = Console.ReadLine();
+
+            string t_pass = "";
+
+            foreach (Passwords item in passwords)
+            {
+                if (item.website == website && item.email == email)
+                {
+                    string[] spliteltpass = item.password.Split("|");
+                    for (int i = 0; i < spliteltpass.Length; i++)
+                    {
+                        foreach (Translate item1 in tranlate)
+                        {
+                            if (item1.code.ToString() == spliteltpass[i].ToString())
+                            {
+                                t_pass += item1.code + "|";
+                            }
+                        }
+                    }
+                }
+            }
 
             StreamWriter sw = new StreamWriter("n.txt", false);
 
             for (int i = 0; i < n; i++)
             {
-                if (passwords1[i].password == password)
+                if (passwords1[i].password == t_pass)
                 {
                     passwords1[i].email = newEmail;
                     sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {newEmail} {passwords1[i].website}");
@@ -549,8 +592,9 @@ namespace jelszokezelo
 
         static void NewUsername()
         {
-            Console.Write("Please enter the password combination of the query! ");
+            Console.Write("Please enter the website of the query! ");
             string website = Console.ReadLine();
+            Console.WriteLine("Please enter the email of the query!");
             string email = Console.ReadLine();
 
             Console.Write("Please enter the new username: ");
