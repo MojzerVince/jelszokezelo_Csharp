@@ -26,7 +26,7 @@ namespace jelszokezelo
       
         static void Main()
         {
-            //Characters(); //legjobb ha töröljük de véletlen se nyúlunk hozzá 
+            //Characters(); // NE NYYÚLJ HOZZÁ!!! legjobb ha töröljük de véletlen se nyúlunk hozzá 
             LoadTranslateList("trans.txt");
             Load("n.txt");
 
@@ -781,6 +781,7 @@ namespace jelszokezelo
             
         }
         /*
+         * EHHEZ SE NYÚLJ!!!!
         static void Characters()
         {
             StreamWriter sw = new StreamWriter("trans.txt", false);
