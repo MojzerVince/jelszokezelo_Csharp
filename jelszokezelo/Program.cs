@@ -24,7 +24,7 @@ namespace jelszokezelo
 
         static string pass = ""; //jelszó változó
         static string realpass = ""; //fordított jelszó 
-      
+        
         static void Main()
         {
             //Characters(); // NE NYYÚLJ HOZZÁ!!! legjobb ha töröljük de véletlen se nyúlunk hozzá 
@@ -38,19 +38,22 @@ namespace jelszokezelo
             {
                 for (int i = 0; i < 1; i++)
                 {
-                    if (passwords1[i].password.Length > 21)
+                    if (passwords.Count() > 0)
                     {
-                        Load("n.txt"); //mentett jelszavak betöltése 
-                        one = false;
+                        if (passwords1[i].password.Length > 21)
+                        {
+                            Load("n.txt"); //mentett jelszavak betöltése
+                            one = false;
+                        }
+                        else if (passwords1[i].password.Length < 21)
+                        {
+                            VersionUpdate("n.txt");
+                            one = false;
+                        }
                     }
-                    else if (passwords1 == null) //nem működik
+                    else if (passwords.Count() == 0) //nem működik
                     {
                         Menu();
-                        one = false;
-                    }
-                    else if (passwords1[i].password.Length < 21)
-                    {
-                        VersionUpdate("n.txt");
                         one = false;
                     }
                 }
@@ -468,7 +471,8 @@ namespace jelszokezelo
         static void Query() //Jelszavak kiíratása
         {
             Load("n.txt");
-            bool exist = false;            
+
+            bool exist = false;
             string t_pass = "";
 
             Console.WriteLine("Saved passwords from: ");
@@ -480,62 +484,52 @@ namespace jelszokezelo
             Console.Write("Enter website name to show password, delete or modify, R to return: ");
             string input = Console.ReadLine();
 
-            if(input.ToLower() == "r")
+            if (input.ToLower() == "r")
             {
                 Console.Clear();
-                Menu();
+                Main();
             }
             else
             {
                 Console.Clear();
+
+                foreach (Passwords item in passwords)
+                {
+                    if (input == item.website)
+                    {
+                        string[] spliteltpass = item.password.Split("|");
+                        for (int i = 0; i < spliteltpass.Length; i++)
+                        {
+                            foreach (Translate item1 in tranlate)
+                            {
+                                if (item1.code.ToString() == spliteltpass[i].ToString())
+                                    t_pass += item1.letter;
+                            }
+                        }
+                    }
+                }
+
                 foreach (Passwords item in passwords)
                 {
                     if (item.website == input)
                     {
                         exist = true;
-                        Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {item.password} \n");
+                        Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {t_pass} \n");
+                        Console.WriteLine();
                     }
                 }
-            }
-            
-            foreach (Passwords item in passwords)
-            {               
-                if (input == item.website)
-                {
-                    string[] spliteltpass = item.password.Split("|");
-                    for (int i = 0; i < spliteltpass.Length; i++)                        
-                    {
-                        foreach (Translate item1 in tranlate)
-                        {
-                            if (item1.code.ToString() == spliteltpass[i].ToString())
-                                t_pass += item1.letter;
-                        }
-                    }
-                }                
-            }
-                        
-            Console.Clear();
-            foreach (Passwords item in passwords)
-            {
-                if (item.website == input)
-                {
-                    exist = true;
-                    Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {t_pass} \n");
-                    //t_pass = "";
-                    Console.WriteLine();
-                }
-            }            
 
-            if (!exist)
-            {
-                Console.Clear();
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.WriteLine("Not valid query! Try again :(");
-                Console.ResetColor();
-                Query();
+                if (!exist)
+                {
+                    Console.Clear();
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine("Not valid query! Try again :(");
+                    Console.ResetColor();
+                    Query();
+                }
+                else Manipulate();
             }
-            else Manipulate();          
         }
 
         static void Manipulate() //Jelszavak módosítására lehetőség
@@ -710,10 +704,6 @@ namespace jelszokezelo
             }
 
             StreamWriter sw = new StreamWriter("n.txt", false);
-
-            //;jdhkkSm(;C[MWt*#'9tEA=K#PNl%PC[MWt5S4K:EA=K#Aayx/
-            //;jdhk|kSm(;|C[MWt|*#'9t|EA=K#|PNl%P|C[MWt|5S4K:|EA=K#|Aayx/|
-
 
             for (int i = 0; i < n; i++)
             {
