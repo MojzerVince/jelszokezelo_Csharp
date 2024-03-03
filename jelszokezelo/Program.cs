@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Diagnostics.Tracing;
 using System.Runtime.InteropServices;
@@ -37,14 +38,19 @@ namespace jelszokezelo
             {
                 for (int i = 0; i < 1; i++)
                 {
-                    if (passwords1[i].password.Length < 21)
-                    {
-                        VersionUpdate("n.txt");
-                        one = false;
-                    }
-                    else
+                    if (passwords1[i].password.Length > 21)
                     {
                         Load("n.txt"); //mentett jelszavak betöltése 
+                        one = false;
+                    }
+                    else if (passwords1 == null) //nem működik
+                    {
+                        Menu();
+                        one = false;
+                    }
+                    else if (passwords1[i].password.Length < 21)
+                    {
+                        VersionUpdate("n.txt");
                         one = false;
                     }
                 }
@@ -210,8 +216,7 @@ namespace jelszokezelo
         }
 
         static void AddPass() //Custom jelszó hozzáadás
-        {
-            StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz 
+        { 
 
             string usern;
             string email;
@@ -241,12 +246,27 @@ namespace jelszokezelo
 
             Console.WriteLine("Check it! Is it right? Want to save it? Y/N: ");
 
+            string t_pass = "";
+
+            for (int i = 0; i < password.Length; i++)
+            {
+                foreach (Translate item1 in tranlate)
+                {
+                    if (item1.letter.ToString() == password[i].ToString())
+                    {
+                        t_pass += item1.code + "|";
+                    }
+                }
+            }
+
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+
+            StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz 
 
             switch (consoleKeyInfo.Key)
             {
                 case ConsoleKey.Y:
-                    sw.WriteLine($"{password} {usern} {email} {website}");
+                    sw.WriteLine($"{t_pass} {usern} {email} {website}");
                     sw.Close();
                     Console.Clear();
                     Console.BackgroundColor= ConsoleColor.Green;
