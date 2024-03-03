@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Diagnostics.Tracing;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Xml.Linq;
@@ -27,7 +28,8 @@ namespace jelszokezelo
         {
             //Characters(); //legjobb ha töröljük de véletlen se nyúlunk hozzá 
             LoadTranslateList("trans.txt");
-            Load("n.txt"); //mentett jelszavak betöltése            
+            VersionUpdate("n.txt");
+            //Load("n.txt"); //mentett jelszavak betöltése            
             Menu(); //menükód bekérése        
         }
 
@@ -293,6 +295,64 @@ namespace jelszokezelo
                     Save();
                     break;
             }
+        }
+
+        static void VersionUpdate(string file)
+        {
+            StreamReader sr = new StreamReader(file);
+
+            while (!sr.EndOfStream)
+            {
+                string row = sr.ReadLine();
+                string[] data = row.Split(" ");
+
+                Passwords pass = new Passwords();
+
+                try //megnézi, hogy beolvashatóak-e az adatok
+                {
+                    string t_pass = "";
+
+                    string[] spliteltpass = new string[21];
+
+                    foreach (var item in data[0])
+                    {
+                        for (int i = 0; i < data[0].Length; i++)
+                        {
+                            spliteltpass[i] = item.ToString();
+                        }
+                    }
+
+                    for (int i = 0; i < spliteltpass.Length; i++)
+                    {
+                        foreach (Translate item1 in tranlate)
+                        {
+                            if (item1.letter.ToString() == spliteltpass[i].ToString())
+                            {
+                                t_pass += item1.letter;
+                            }
+                        }
+                    }
+
+                    pass.password = t_pass;
+                    pass.username = data[1];
+                    pass.email = data[2];
+                    pass.website = data[3];
+
+                    passwords.Add(pass);
+                }
+                catch { } //ha nem, akkor nem csinál semmit xd*/
+            }
+            sr.Close();
+
+            StreamWriter sw = new StreamWriter(file, false);
+
+            foreach (var item in passwords)
+            {
+                sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");
+            }
+            sw.Close();
+
+            
         }
 
         static void Translator()
