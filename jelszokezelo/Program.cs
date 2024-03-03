@@ -35,7 +35,34 @@ namespace jelszokezelo
             Console.WriteLine("Options:   | 0: Generate new password | 1: Show passwords | 2: Add an existing password | ESC: Exit");
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);            
+            
+            switch (consoleKeyInfo.Key)
+            {
+                case ConsoleKey.NumPad0:
+                case ConsoleKey.D0:
+                    Console.Clear();
+                    Input();
+                    Save();                  //jelszó mentése egy txt fájlba
+                    break;
+                case ConsoleKey.NumPad1:
+                case ConsoleKey.D1:
+                    Console.Clear();
+                    Query();                 //Jelszólekérés
+                    break;
+                case ConsoleKey.Escape:
+                    Console.Clear();
+                    Console.WriteLine("Exiting..."); //ha csak 1 E van, akkor valamiért fos
+                    break;
+                case ConsoleKey.NumPad2:
+                case ConsoleKey.D2:
+                    AddPass();
+                    break;
+                default:
+                    Console.Clear();
+                    Menu();
+                    break;
 
+            }
             if (DEBUG) //DEBUG FEATURE-ÖK
             {
                 switch (consoleKeyInfo.Key)
@@ -43,35 +70,6 @@ namespace jelszokezelo
                     case ConsoleKey.NumPad9:
                     case ConsoleKey.D9: //DEBUG ONLY
                         FileDelete("n.txt");
-                        break;
-                }
-            }
-            else
-            {
-                switch (consoleKeyInfo.Key)
-                {
-                    case ConsoleKey.NumPad0:
-                    case ConsoleKey.D0:
-                        Console.Clear();
-                        Input();
-                        Save();                  //jelszó mentése egy txt fájlba
-                        break;
-                    case ConsoleKey.NumPad1:
-                    case ConsoleKey.D1:
-                        Console.Clear();
-                        Query();                 //Jelszólekérés
-                        break;
-                    case ConsoleKey.Escape:
-                        Console.Clear();
-                        Console.WriteLine("Exiting..."); //ha csak 1 E van, akkor valamiért fos
-                        break;
-                    case ConsoleKey.NumPad2:
-                    case ConsoleKey.D2:
-                        AddPass();
-                        break;
-                    default:
-                        Console.Clear();
-                        Menu();
                         break;
                 }
             }
