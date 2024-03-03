@@ -28,8 +28,27 @@ namespace jelszokezelo
         {
             //Characters(); //legjobb ha töröljük de véletlen se nyúlunk hozzá 
             LoadTranslateList("trans.txt");
-            VersionUpdate("n.txt");
-            //Load("n.txt"); //mentett jelszavak betöltése            
+            Load("n.txt");
+
+            //Felismeri ha a txt-ben régebbi verziójú átfordítatlan jelszavak vannak, ennek függvényében ha szükséges akkor frissül a txt-ben lévvő összes jelszó!!
+            bool one = true;
+
+            while (one)
+            {
+                for (int i = 0; i < 1; i++)
+                {
+                    if (passwords1[i].password.Length < 21)
+                    {
+                        VersionUpdate("n.txt");
+                        one = false;
+                    }
+                    else
+                    {
+                        Load("n.txt"); //mentett jelszavak betöltése 
+                        one = false;
+                    }
+                }
+            }
             Menu(); //menükód bekérése        
         }
 
@@ -299,6 +318,8 @@ namespace jelszokezelo
 
         static void VersionUpdate(string file)
         {
+            passwords.Clear();
+
             StreamReader sr = new StreamReader(file);
 
             while (!sr.EndOfStream)
@@ -312,23 +333,13 @@ namespace jelszokezelo
                 {
                     string t_pass = "";
 
-                    string[] spliteltpass = new string[21];
-
-                    foreach (var item in data[0])
-                    {
-                        for (int i = 0; i < data[0].Length; i++)
-                        {
-                            spliteltpass[i] = item.ToString();
-                        }
-                    }
-
-                    for (int i = 0; i < spliteltpass.Length; i++)
+                    for (int i = 0; i < data[0].Length; i++)
                     {
                         foreach (Translate item1 in tranlate)
                         {
-                            if (item1.letter.ToString() == spliteltpass[i].ToString())
+                            if (item1.letter.ToString() == data[0][i].ToString())
                             {
-                                t_pass += item1.letter;
+                                t_pass += item1.code + "|";
                             }
                         }
                     }
@@ -351,8 +362,6 @@ namespace jelszokezelo
                 sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");
             }
             sw.Close();
-
-            
         }
 
         static void Translator()
@@ -771,8 +780,8 @@ namespace jelszokezelo
             }
             
         }
-  
-        /*static void Characters()
+        /*
+        static void Characters()
         {
             StreamWriter sw = new StreamWriter("trans.txt", false);
             
@@ -781,7 +790,7 @@ namespace jelszokezelo
                 Random r = new Random();
                 string randomCode = "";
 
-                while (randomCode.Count() < 5)
+                while (randomCode.Count() < 10)
                 {
                     index = r.Next(0, chars.Count());
                     randomCode += chars[index];                    
@@ -789,6 +798,7 @@ namespace jelszokezelo
                 sw.WriteLine($"{chars[j]} {randomCode}");
             }
             sw.Close();
-        }*/
+        }
+        */
     }
 }
