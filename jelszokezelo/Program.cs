@@ -17,7 +17,6 @@ namespace jelszokezelo
         static List<Translate> tranlate = new List<Translate>();
       
         static int n = 0;
-        static int c = 0;
 
         static string[] chars = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "!", "@", "#", "$", "%", "&", "*", "(", ")", "_", "+", "-", "=", "{", "}", "[", "]", ":", ";", "'", "<", ">", ",", ".", "?", "/"};
         static int index = 0; //random választott betűk indexe
@@ -76,8 +75,7 @@ namespace jelszokezelo
                 case ConsoleKey.D0:
                     Console.Clear();
                     Input();               
-                    Translator();
-                    Save();                  //jelszó mentése egy txt fájlba
+                    Translator();                    
                     break;
                 case ConsoleKey.NumPad1:
                 case ConsoleKey.D1:
@@ -86,7 +84,7 @@ namespace jelszokezelo
                     break;
                 case ConsoleKey.Escape:
                     Console.Clear();
-                    Console.WriteLine("Exiting..."); //ha csak 1 E van, akkor valamiért fos
+                    Console.WriteLine("Exiting...");
                     break;
                 case ConsoleKey.NumPad2:
                 case ConsoleKey.D2:
@@ -139,6 +137,7 @@ namespace jelszokezelo
                                 Console.Write("Password Length: ");
                                 passLength = byte.Parse(Console.ReadLine());
                             }
+                            Save();
                         }
                         catch
                         {
@@ -165,6 +164,7 @@ namespace jelszokezelo
                                 Console.Write("PIN Length: ");
                                 passLength = byte.Parse(Console.ReadLine());
                             }
+                            Save();
                         }
                         catch
                         {
@@ -174,11 +174,7 @@ namespace jelszokezelo
                     break;
                 case ConsoleKey.Escape:
                     Console.Clear();
-                    Menu();
-                    break;
-                default:
-                    Console.Clear();
-                    Input();
+                    Main();
                     break;
             }            
         }
@@ -234,7 +230,6 @@ namespace jelszokezelo
 
         static void AddPass() //Custom jelszó hozzáadás
         { 
-
             string usern;
             string email;
             string website;
@@ -261,7 +256,7 @@ namespace jelszokezelo
                 password = Console.ReadLine();
             } while (password == "");
 
-            Console.WriteLine("Check it! Is it right? Want to save it? Y/N: ");
+            Console.Write("Check it! Is it right? Want to save it? Y/N: ");
 
             string t_pass = "";
 
@@ -297,8 +292,7 @@ namespace jelszokezelo
                     sw.Close();
                     Menu();                                     
                     break;
-            }
-            
+            }            
             sw.Close();            
         }
 
@@ -741,7 +735,7 @@ namespace jelszokezelo
         {
             Console.Write("Please enter the website of the query! ");
             string website = Console.ReadLine();
-            Console.WriteLine("Please enter the email of the query!");
+            Console.Write("Please enter the email of the query! ");
             string email = Console.ReadLine();
 
             string t_pass = "";
