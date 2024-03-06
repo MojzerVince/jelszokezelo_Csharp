@@ -591,7 +591,7 @@ namespace jelszokezelo
         {
             Console.Write("Please enter the website of the query! ");
             string website = Console.ReadLine();
-            Console.Write("Please enter the email of the query!");
+            Console.Write("Please enter the email of the query! ");
             string email = Console.ReadLine();
 
             Console.Write("Please enter the new website: ");
@@ -638,7 +638,7 @@ namespace jelszokezelo
         {
             Console.Write("Please enter the website of the query! ");
             string website = Console.ReadLine();
-            Console.Write("Please enter the email of the query!");
+            Console.Write("Please enter the email of the query! ");
             string email = Console.ReadLine();
 
             Console.Write("Please enter the new email: ");
@@ -685,7 +685,7 @@ namespace jelszokezelo
         {
             Console.Write("Please enter the website of the query! ");
             string website = Console.ReadLine();
-            Console.Write("Please enter the email of the query!");
+            Console.Write("Please enter the email of the query! ");
             string email = Console.ReadLine();
 
             Console.Write("Please enter the new username: ");
