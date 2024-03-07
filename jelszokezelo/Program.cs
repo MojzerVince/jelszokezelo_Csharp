@@ -22,14 +22,14 @@ namespace jelszokezelo
         static int index = 0; //random választott betűk indexe
         static byte passLength = 0;
 
-        static string pass = ""; //jelszó változó
-        static string realpass = ""; //fordított jelszó
+        static string pass = ""; //jelszó változó     
       
         static bool DEBUG = true; //Kiadásnál át kell rakni false-ra és minden debug funkció kikapcsol majd
         
         static void Main()
         {
             //Characters(); // NE NYYÚLJ HOZZÁ!!! legjobb ha töröljük de véletlen se nyúlunk hozzá 
+            CheckForFile("n.txt");
             LoadTranslateList("trans.txt");
             Load("n.txt");
 
