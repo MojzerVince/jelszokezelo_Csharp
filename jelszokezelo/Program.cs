@@ -28,6 +28,14 @@ namespace jelszokezelo
         
         static void Main()
         {
+            if (new FileInfo("login.txt").Length == 0)
+            {
+                Register();
+            }
+            else
+            {
+                Login();
+            }
             //Characters(); // NE NYYÚLJ HOZZÁ!!! legjobb ha töröljük de véletlen se nyúlunk hozzá 
             CheckForFile("n.txt");
             LoadTranslateList("trans.txt");
@@ -59,12 +67,13 @@ namespace jelszokezelo
                         one = false;
                     }
                 }
-            }
-            Menu(); //menükód bekérése        
+            }                  
         }
 
         static void Menu() //Menürendszer
         {
+            Load("n.txt");
+
             Console.WriteLine("Options:   | 0: Generate new password | 1: Show passwords | 2: Add an existing password | ESC: Exit");
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);            
@@ -106,6 +115,66 @@ namespace jelszokezelo
                         break;
                 }
             }
+        }
+
+        /* !!! NEM MŰKÖDIK EZÉRT KIMÁSOLTAM A TARTALMÁT A MAINBE !!!
+        static void CheckForLoginData()
+        {
+            if (new FileInfo("login.txt").Length == 0)
+            {
+                Register();
+            }
+            else
+            {
+                Login();
+            }
+        }
+        */
+
+        static void Register()
+        {
+            Console.WriteLine("REGISTRATION");
+            Console.Write("Add login username: ");
+            string user = Console.ReadLine();
+            Console.Write("Add login password: ");
+            string pass = Console.ReadLine();
+
+            StreamWriter sw = new StreamWriter("login.txt", false);
+
+            sw.WriteLine(user + " " + pass);
+
+            sw.Close();
+        }
+
+        static void Login()
+        {
+            Console.WriteLine("LOGIN");
+            Console.Write("Username: ");
+            string user = Console.ReadLine();
+            Console.Write("Password: ");
+            string pass = Console.ReadLine();
+
+            StreamReader sr = new StreamReader("login.txt");
+
+            while(!sr.EndOfStream)
+            {
+                string row = sr.ReadLine();
+
+                string[] data = row.Split(" ");
+
+                if (user == data[0] && pass == data[1])
+                {
+                    Console.WriteLine("Login successfull!!");
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Wrong password or username!!!");
+                    Login();
+                }
+            }
+            sr.Close();
+
         }
 
         static void Input() //Jelszóhosszúság ellenőrzése
@@ -174,7 +243,7 @@ namespace jelszokezelo
                     break;
                 case ConsoleKey.Escape:
                     Console.Clear();
-                    Main();
+                    Menu();
                     break;
             }            
         }
@@ -285,7 +354,7 @@ namespace jelszokezelo
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.WriteLine("Password saved");
                     Console.ResetColor();
-                    Main();
+                    Menu();
                     break;
                 case ConsoleKey.N:
                     Console.Clear();
@@ -332,7 +401,7 @@ namespace jelszokezelo
                     Console.Clear();
                     Console.WriteLine("Password saved");
                     pass = ""; //változó reset       
-                    Main();
+                    Menu();
                     break;
                 case ConsoleKey.N:
                     pass = ""; //törli a változó értékét
@@ -495,7 +564,7 @@ namespace jelszokezelo
             if (input.ToLower() == "r")
             {
                 Console.Clear();
-                Main();
+                Menu();
             }
             else
             {
@@ -631,7 +700,7 @@ namespace jelszokezelo
             }
             sw.Close();
             Console.Clear();
-            Main();
+            Menu();
         }
 
         static void NewEmail()
@@ -678,7 +747,7 @@ namespace jelszokezelo
             }
             sw.Close();
             Console.Clear();
-            Main();
+            Menu();
         }
 
         static void NewUsername()
@@ -728,7 +797,7 @@ namespace jelszokezelo
             Console.WriteLine();
             Console.WriteLine();
             Console.Clear();
-            Main();
+            Menu();
         }
         
         static void Delete() //Jelszó adatok törlése  
@@ -784,7 +853,7 @@ namespace jelszokezelo
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.WriteLine("Password successfully deleted!");
                 Console.ResetColor();
-                Main();
+                Menu();
                 Console.WriteLine();
             }            
 
