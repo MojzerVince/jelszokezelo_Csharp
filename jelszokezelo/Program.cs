@@ -425,6 +425,7 @@ namespace jelszokezelo
                             if (website[i] == ' ')
                             {
                                 b_website = true;
+                                break;
                             }
                             else
                             {
