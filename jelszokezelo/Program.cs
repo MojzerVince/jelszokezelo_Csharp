@@ -133,25 +133,21 @@ namespace jelszokezelo
 
         static void Register()
         {
-            Console.WriteLine("REGISTRATION");
-            Console.Write("Add login username: ");
-            string user = Console.ReadLine();
-            Console.Write("Add login password: ");
+            Console.WriteLine("REGISTRATION");           
+            Console.Write("Add login PIN: ");
             string pass = Console.ReadLine();
 
             StreamWriter sw = new StreamWriter("login.txt", false);
 
-            sw.WriteLine(user + " " + pass);
+            sw.WriteLine(pass);
 
             sw.Close();
         }
 
         static void Login()
         {
-            Console.WriteLine("LOGIN");
-            Console.Write("Username: ");
-            string user = Console.ReadLine();
-            Console.Write("Password: ");
+            Console.WriteLine("LOGIN");            
+            Console.Write("PIN: ");
             string pass = Console.ReadLine();
 
             StreamReader sr = new StreamReader("login.txt");
@@ -160,16 +156,14 @@ namespace jelszokezelo
             {
                 string row = sr.ReadLine();
 
-                string[] data = row.Split(" ");
-
-                if (user == data[0] && pass == data[1])
+                if (pass == row)
                 {
                     Console.WriteLine("Login successfull!!");
                 }
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine("Wrong password or username!!!");
+                    Console.WriteLine("Wrong PIN!!!");
                     Login();
                 }
             }
