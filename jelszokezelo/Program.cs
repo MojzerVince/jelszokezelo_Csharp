@@ -68,6 +68,7 @@ namespace jelszokezelo
                     }
                 }
             }                  
+            Menu();
         }
 
         static void Menu() //Menürendszer
