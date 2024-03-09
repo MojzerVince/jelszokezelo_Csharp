@@ -201,6 +201,7 @@ namespace jelszokezelo
                                 Console.Write("Password Length: ");
                                 passLength = byte.Parse(Console.ReadLine());
                             }
+                            Translator();
                             Save();
                         }
                         catch
@@ -228,6 +229,7 @@ namespace jelszokezelo
                                 Console.Write("PIN Length: ");
                                 passLength = byte.Parse(Console.ReadLine());
                             }
+                            Translator();
                             Save();
                         }
                         catch
