@@ -370,8 +370,11 @@ namespace jelszokezelo
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
             string usern;
+            bool b_usern = true;
             string email;
+            bool b_email = true;
             string website;
+            bool b_website = true;
           
             switch (consoleKeyInfo.Key)
             {
@@ -381,17 +384,54 @@ namespace jelszokezelo
                     {
                         Console.Write("Username: ");
                         usern = Console.ReadLine();
-                    } while (usern == "");
+                        for (int i = 0; i < usern.Length; i++)
+                        {
+                            if (usern[i] == ' ')
+                            {
+                                b_usern = true;
+                                break;
+                            }
+                            else
+                            {
+                                b_usern = false;
+                            }
+                        }
+                    } while (b_usern);
+
                     do
                     {
                         Console.Write("Email: ");
                         email = Console.ReadLine();
-                    } while (email == "");
+                        for(int i = 0; i < email.Length; i++)
+                        {
+                            if (email[i] == ' ')
+                            {
+                                b_email = true;
+                                break;
+                            }
+                            else
+                            {
+                                b_email = false;
+                            }
+                        }
+                    } while (b_email);
+
                     do
                     {
                         Console.Write("Website: ");
                         website = Console.ReadLine();
-                    } while (website == "");
+                        for ( int i = 0; i < website.Length; i++)
+                        {
+                            if (website[i] == ' ')
+                            {
+                                b_website = true;
+                            }
+                            else
+                            {
+                                b_website = false;
+                            }
+                        }
+                    } while (b_website);
 
                     sw.WriteLine($"{pass} {usern} {email} {website}");
                     sw.Close();
