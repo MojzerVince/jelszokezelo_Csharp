@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.Design;
 using System.Data;
@@ -15,6 +16,7 @@ namespace jelszokezelo
         static List<Passwords> passwords = new List<Passwords>(); 
         static Passwords[] passwords1 = new Passwords[50];        
         static List<Translate> tranlate = new List<Translate>();
+        static string[] login = new string[2];
       
         static int n = 0;
 
@@ -28,14 +30,29 @@ namespace jelszokezelo
         
         static void Main()
         {
-            if (new FileInfo("login.txt").Length == 0)
+            LoginLoad("login.txt");
+            StreamReader sr = new StreamReader("login.txt");
+
+            string onoff = sr.ReadLine();
+            sr.Close();
+
+            if (onoff == "ON")
+            {
+                if (login[1] == "")
+                {
+                    Register();
+                }
+                else if (login.Length == 2)
+                {
+                    Login();
+                }
+            }
+            else if (onoff == "OFF" && new FileInfo("login.txt").Length == 1)
             {
                 Register();
             }
-            else
-            {
-                Login();
-            }
+            sr.Close();
+           
             //Characters(); // NE NYYÚLJ HOZZÁ!!! legjobb ha töröljük de véletlen se nyúlunk hozzá 
             CheckForFile("n.txt");
             LoadTranslateList("trans.txt");
@@ -75,7 +92,7 @@ namespace jelszokezelo
         {
             Load("n.txt");
 
-            Console.WriteLine("Options:   | 0: Generate new password | 1: Show passwords | 2: Add an existing password | ESC: Exit");
+            Console.WriteLine("Options:   | 0: Generate new password | 1: Show passwords | 2: Add an existing password | 3: Settings | ESC: Exit");
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);            
             
@@ -99,6 +116,10 @@ namespace jelszokezelo
                 case ConsoleKey.NumPad2:
                 case ConsoleKey.D2:
                     AddPass();
+                    break;
+                case ConsoleKey.NumPad3:
+                case ConsoleKey.D3:
+                    Settings();
                     break;
                 default:
                     Console.Clear();
@@ -132,6 +153,58 @@ namespace jelszokezelo
         }
         */
 
+        static void Settings()
+        {
+            Console.WriteLine("1: Turn on/off login section ");
+
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+
+            switch (consoleKeyInfo.Key)
+            {
+                case ConsoleKey.NumPad1:
+                case ConsoleKey.D1:
+                    TurnOffOn();
+                    break;
+            }
+        }
+
+        static void TurnOffOn()
+        {
+            StreamReader sr = new StreamReader("login.txt");
+            sr.ReadLine();
+            string pin = sr.ReadLine();
+            sr.Close();
+
+            StreamWriter sw = new StreamWriter("login.txt", false);
+
+            Console.WriteLine("Do you want to turn off / on login section? Write \"off\"/\"on\"");
+            string inp = Console.ReadLine().ToUpper();
+
+            if (inp == "OFF")
+            {
+                sw.WriteLine("OFF");
+            }
+            else if (inp == "ON")
+            {
+                sw.WriteLine("ON");
+                sw.WriteLine(pin);
+            }
+            sw.Close();
+        }
+
+        static void LoginLoad(string file)
+        {
+            StreamReader sr = new StreamReader(file);
+
+            while (!sr.EndOfStream)
+            {
+                login[0] = sr.ReadLine();
+                login[1] = sr.ReadLine();
+            }
+
+            sr.Close();
+        }
+
         static void Register()
         {
             Console.WriteLine("REGISTRATION");           
@@ -140,6 +213,7 @@ namespace jelszokezelo
 
             StreamWriter sw = new StreamWriter("login.txt", false);
 
+            sw.WriteLine("ON");
             sw.WriteLine(pass);
 
             sw.Close();
@@ -155,6 +229,7 @@ namespace jelszokezelo
 
             while(!sr.EndOfStream)
             {
+                sr.ReadLine();
                 string row = sr.ReadLine();
 
                 if (pass == row)
