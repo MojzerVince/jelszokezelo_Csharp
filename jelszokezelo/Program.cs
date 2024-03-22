@@ -332,7 +332,10 @@ namespace jelszokezelo
                     sw.WriteLine($"{pass} {usern} {email} {website}");
                     sw.Close();
                     Console.Clear();
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Black;
                     Console.WriteLine("Password saved");
+                    Console.ResetColor();
                     pass = ""; //változó reset       
                     Main();
                     break;
