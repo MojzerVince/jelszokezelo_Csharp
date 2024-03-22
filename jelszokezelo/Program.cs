@@ -699,9 +699,14 @@ namespace jelszokezelo
                                     t_pass += item1.letter;
                             }
                         }
+                        exist = true;
+                        Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {t_pass} \n");
+                        Console.WriteLine();
+                        t_pass = "";
                     }
                 }
 
+                /*
                 foreach (Passwords item in passwords)
                 {
                     if (item.website == input)
@@ -711,6 +716,7 @@ namespace jelszokezelo
                         Console.WriteLine();
                     }
                 }
+                */
 
                 if (!exist)
                 {
