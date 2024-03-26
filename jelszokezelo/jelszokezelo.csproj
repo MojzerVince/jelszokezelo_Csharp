@@ -8,9 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="n.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="trans.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
