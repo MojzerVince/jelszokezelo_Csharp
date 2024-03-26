@@ -332,7 +332,10 @@ namespace jelszokezelo
                     sw.WriteLine($"{pass} {usern} {email} {website}");
                     sw.Close();
                     Console.Clear();
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Black;
                     Console.WriteLine("Password saved");
+                    Console.ResetColor();
                     pass = ""; //változó reset       
                     Main();
                     break;
@@ -516,16 +519,10 @@ namespace jelszokezelo
                                     t_pass += item1.letter;
                             }
                         }
-                    }
-                }
-
-                foreach (Passwords item in passwords)
-                {
-                    if (item.website == input)
-                    {
                         exist = true;
                         Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {t_pass} \n");
                         Console.WriteLine();
+                        t_pass = "";
                     }
                 }
 
