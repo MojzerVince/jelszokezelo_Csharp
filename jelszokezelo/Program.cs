@@ -85,7 +85,6 @@ namespace jelszokezelo
                     }
                 }
             }                  
-            Menu();
         }
 
         static void Menu() //Menürendszer
@@ -177,19 +176,25 @@ namespace jelszokezelo
 
             StreamWriter sw = new StreamWriter("login.txt", false);
 
-            Console.WriteLine("Do you want to turn off / on login section? Write \"off\"/\"on\"");
+            Console.Write("Do you want to turn off / on login section? Write \"off\"/\"on\": ");
             string inp = Console.ReadLine().ToUpper();
 
             if (inp == "OFF")
             {
                 sw.WriteLine("OFF");
+                Console.Clear();
+                Console.WriteLine("Login turned OFF");
             }
             else if (inp == "ON")
             {
                 sw.WriteLine("ON");
                 sw.WriteLine(pin);
+                Console.Clear();
+                Console.WriteLine("Login turned ON");
             }
             sw.Close();
+
+            Menu();
         }
 
         static void LoginLoad(string file)
