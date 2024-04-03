@@ -27,8 +27,48 @@ namespace jelszokezelo
         static string pass = ""; //jelszó változó     
       
         static bool DEBUG = true; //Kiadásnál át kell rakni false-ra és minden debug funkció kikapcsol majd
-        
+
+        static bool log = true;
         static void Main()
+        {
+            
+           
+            //Characters(); // NE NYYÚLJ HOZZÁ!!! legjobb ha töröljük de véletlen se nyúlunk hozzá 
+            CheckForFile("n.txt");
+            LoadTranslateList("trans.txt");
+            Load("n.txt");
+
+            //Felismeri ha a txt-ben régebbi verziójú átfordítatlan jelszavak vannak, ennek függvényében ha szükséges akkor frissül a txt-ben lévvő összes jelszó!!
+            bool one = true;
+
+            while (one)
+            {
+                for (int i = 0; i < 1; i++)
+                {
+                    if (passwords.Count() > 0)
+                    {
+                        if (passwords1[i].password.Length > 21)
+                        {
+                            Load("n.txt"); //mentett jelszavak betöltése
+                            one = false;                         
+                        }
+                        else if (passwords1[i].password.Length < 21)
+                        {
+                            VersionUpdate("n.txt");
+                            one = false;
+                        }
+                    }
+                    else if (passwords.Count() < 1) //nem működik
+                    {
+                        Menu();
+                        one = false;
+                    }
+                }
+            }    
+            Menu();
+        }
+
+        static void LoginCheck()
         {
             LoginLoad("login.txt");
             StreamReader sr = new StreamReader("login.txt");
@@ -51,46 +91,16 @@ namespace jelszokezelo
             {
                 Register();
             }
-            sr.Close();
-           
-            //Characters(); // NE NYYÚLJ HOZZÁ!!! legjobb ha töröljük de véletlen se nyúlunk hozzá 
-            CheckForFile("n.txt");
-            LoadTranslateList("trans.txt");
-            Load("n.txt");
-
-            //Felismeri ha a txt-ben régebbi verziójú átfordítatlan jelszavak vannak, ennek függvényében ha szükséges akkor frissül a txt-ben lévvő összes jelszó!!
-            bool one = true;
-
-            while (one)
-            {
-                for (int i = 0; i < 1; i++)
-                {
-                    if (passwords.Count() > 0)
-                    {
-                        if (passwords1[i].password.Length > 21)
-                        {
-                            Load("n.txt"); //mentett jelszavak betöltése
-                            one = false;
-                        }
-                        else if (passwords1[i].password.Length < 21)
-                        {
-                            VersionUpdate("n.txt");
-                            one = false;
-                        }
-                    }
-                    else if (passwords.Count() == 0) //nem működik
-                    {
-                        Menu();
-                        one = false;
-                    }
-                }
-            }                  
         }
 
         static void Menu() //Menürendszer
         {
             Load("n.txt");
-
+            if (log == true)
+            {                
+                LoginCheck();
+            }
+            log = false;
             Console.WriteLine("Options:   | 0: Generate new password | 1: Show passwords | 2: Add an existing password | 3: Settings | ESC: Exit");
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);            
@@ -136,6 +146,7 @@ namespace jelszokezelo
                         break;
                 }
             }
+            
         }
 
         /* !!! NEM MŰKÖDIK EZÉRT KIMÁSOLTAM A TARTALMÁT A MAINBE !!!
@@ -193,6 +204,7 @@ namespace jelszokezelo
                 Console.WriteLine("Login turned ON");
             }
             sw.Close();
+            log = true;
 
             Menu();
         }
