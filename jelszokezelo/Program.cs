@@ -697,7 +697,6 @@ namespace jelszokezelo
             if (input.ToLower() == "r")
             {
                 Console.Clear();
-                Menu();
             }
             else
             {
