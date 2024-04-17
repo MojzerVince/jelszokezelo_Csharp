@@ -180,30 +180,32 @@ namespace jelszokezelo
 
         static void TurnOffOn()
         {
-            StreamReader sr = new StreamReader("login.txt");
-            sr.ReadLine();
-            string pin = sr.ReadLine();
-            sr.Close();
-
-            StreamWriter sw = new StreamWriter("login.txt", false);
-
-            Console.Write("Do you want to turn off / on login section? Write \"off\"/\"on\": ");
-            string inp = Console.ReadLine().ToUpper();
-
-            if (inp == "OFF")
+            using (StreamReader sr = new StreamReader("login.txt"))
             {
-                sw.WriteLine("OFF");
-                Console.Clear();
-                Console.WriteLine("Login turned OFF");
+                sr.ReadLine();
+                string pin = sr.ReadLine();
+
+                using (StreamWriter sw = new StreamWriter("login.txt", false))
+                {
+
+                    Console.Write("Do you want to turn off / on login section? Write \"off\"/\"on\": ");
+                    string inp = Console.ReadLine().ToUpper();
+
+                    if (inp == "OFF")
+                    {
+                        sw.WriteLine("OFF");
+                        Console.Clear();
+                        Console.WriteLine("Login turned OFF");
+                    }
+                    else if (inp == "ON")
+                    {
+                        sw.WriteLine("ON");
+                        sw.WriteLine(pin);
+                        Console.Clear();
+                        Console.WriteLine("Login turned ON");
+                    }
+                }
             }
-            else if (inp == "ON")
-            {
-                sw.WriteLine("ON");
-                sw.WriteLine(pin);
-                Console.Clear();
-                Console.WriteLine("Login turned ON");
-            }
-            sw.Close();
             log = true;
 
             Menu();
@@ -553,48 +555,48 @@ namespace jelszokezelo
         {
             passwords.Clear();
 
-            StreamReader sr = new StreamReader(file);
-
-            while (!sr.EndOfStream)
+            using (StreamReader sr = new StreamReader(file))
             {
-                string row = sr.ReadLine();
-                string[] data = row.Split(" ");
-
-                Passwords pass = new Passwords();
-
-                try //megnézi, hogy beolvashatóak-e az adatok
+                while (!sr.EndOfStream)
                 {
-                    string t_pass = "";
+                    string row = sr.ReadLine();
+                    string[] data = row.Split(" ");
 
-                    for (int i = 0; i < data[0].Length; i++)
+                    Passwords pass = new Passwords();
+
+                    try //megnézi, hogy beolvashatóak-e az adatok
                     {
-                        foreach (Translate item1 in tranlate)
+                        string t_pass = "";
+
+                        for (int i = 0; i < data[0].Length; i++)
                         {
-                            if (item1.letter.ToString() == data[0][i].ToString())
+                            foreach (Translate item1 in tranlate)
                             {
-                                t_pass += item1.code + "|";
+                                if (item1.letter.ToString() == data[0][i].ToString())
+                                {
+                                    t_pass += item1.code + "|";
+                                }
                             }
                         }
+
+                        pass.password = t_pass;
+                        pass.username = data[1];
+                        pass.email = data[2];
+                        pass.website = data[3];
+
+                        passwords.Add(pass);
                     }
-
-                    pass.password = t_pass;
-                    pass.username = data[1];
-                    pass.email = data[2];
-                    pass.website = data[3];
-
-                    passwords.Add(pass);
+                    catch { } //ha nem, akkor nem csinál semmit xd*/
                 }
-                catch { } //ha nem, akkor nem csinál semmit xd*/
             }
-            sr.Close();
 
-            StreamWriter sw = new StreamWriter(file, false);
-
-            foreach (var item in passwords)
+            using (StreamWriter sw = new StreamWriter(file, false))
             {
-                sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");
+                foreach (var item in passwords)
+                {
+                    sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");
+                }
             }
-            sw.Close();
         }
 
         static void Translator()
@@ -616,46 +618,47 @@ namespace jelszokezelo
         static void LoadTranslateList(string file)
         {
             tranlate.Clear();
-            StreamReader sr = new StreamReader(file);
-
-            while (!sr.EndOfStream)
+            using (StreamReader sr = new StreamReader(file))
             {
-                string row = sr.ReadLine();
-                string[] data = row.Split(" ");
-                Translate character = new Translate();
-                character.letter = data[0];
-                character.code = data[1];
-                tranlate.Add(character);
+
+                while (!sr.EndOfStream)
+                {
+                    string row = sr.ReadLine();
+                    string[] data = row.Split(" ");
+                    Translate character = new Translate();
+                    character.letter = data[0];
+                    character.code = data[1];
+                    tranlate.Add(character);
+                }
             }
-            sr.Close();
         }
 
         static void Load(string file) //Jelszavak betöltése
         {
             passwords.Clear();
-            n = 0;            
+            n = 0;
 
-            StreamReader sr = new StreamReader(file);
-
-            while (!sr.EndOfStream)
+            using (StreamReader sr = new StreamReader(file))
             {
-                string row = sr.ReadLine();
-                string[] data = row.Split(" ");                
-                
-                Passwords pass = new Passwords();
+                while (!sr.EndOfStream)
+                {
+                    string row = sr.ReadLine();
+                    string[] data = row.Split(" ");
 
-                try //megnézi, hogy beolvashatóak-e az adatok
-                {                    
-                    pass.password = data[0];
-                    pass.username = data[1];
-                    pass.email = data[2];
-                    pass.website = data[3];                    
+                    Passwords pass = new Passwords();
 
-                    passwords.Add(pass);  
+                    try //megnézi, hogy beolvashatóak-e az adatok
+                    {
+                        pass.password = data[0];
+                        pass.username = data[1];
+                        pass.email = data[2];
+                        pass.website = data[3];
+
+                        passwords.Add(pass);
+                    }
+                    catch { } //ha nem, akkor nem csinál semmit xd*/
                 }
-                catch { } //ha nem, akkor nem csinál semmit xd*/
             }
-            sr.Close();
 
             StreamReader sr1 = new StreamReader(file);
 
