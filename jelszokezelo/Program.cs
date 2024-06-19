@@ -163,6 +163,7 @@ namespace jelszokezelo
         static void Settings()
         {
             Console.WriteLine("1: Turn on/off login section ");
+            Console.WriteLine("2: Add recovery mode ");
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
@@ -172,7 +173,20 @@ namespace jelszokezelo
                 case ConsoleKey.D1:
                     TurnOffOn();
                     break;
+                case ConsoleKey.NumPad2:
+                case ConsoleKey.D2:
+                    Recovery();
+                    break;
             }
+        }
+
+        static void Recovery()
+        {
+            Console.Write("Filepath of recovery codes txt: ");
+            string path = Console.ReadLine();
+
+            StreamReader sr = new StreamReader(path);
+            string code = sr.ReadLine();
         }
 
         static void TurnOffOn()
