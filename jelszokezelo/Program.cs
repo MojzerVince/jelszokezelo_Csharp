@@ -30,9 +30,7 @@ namespace jelszokezelo
 
         static bool log = true;
         static void Main()
-        {
-            
-           
+        {          
             //Characters(); // NE NYYÚLJ HOZZÁ!!! legjobb ha töröljük de véletlen se nyúlunk hozzá 
             CheckForFile("n.txt");
             LoadTranslateList("trans.txt");
@@ -134,8 +132,8 @@ namespace jelszokezelo
                     Console.Clear();
                     Menu();
                     break;
-
             }
+
             if (DEBUG) //DEBUG FEATURE-ÖK
             {
                 switch (consoleKeyInfo.Key)
@@ -146,7 +144,6 @@ namespace jelszokezelo
                         break;
                 }
             }
-            
         }
 
         /* !!! NEM MŰKÖDIK EZÉRT KIMÁSOLTAM A TARTALMÁT A MAINBE !!!
@@ -218,7 +215,6 @@ namespace jelszokezelo
                 login[0] = sr.ReadLine();
                 login[1] = sr.ReadLine();
             }
-
             sr.Close();
         }
 
@@ -261,7 +257,6 @@ namespace jelszokezelo
                 }
             }
             sr.Close();
-
         }
 
         static void Input() //Jelszóhosszúság ellenőrzése
