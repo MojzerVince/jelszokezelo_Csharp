@@ -64,8 +64,7 @@ namespace jelszokezelo
                         one = false;
                     }
                 }
-            }    
-            Menu();
+            }
         }
 
         static void LoginCheck()
