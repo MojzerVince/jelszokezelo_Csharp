@@ -194,14 +194,22 @@ namespace jelszokezelo
             {
                 sw.WriteLine("OFF");
                 Console.Clear();
-                Console.WriteLine("Login turned OFF");
+                Console.Write("Login is turned ");
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.Write(" OFF \n");
+                Console.ResetColor();
             }
             else if (inp == "ON")
             {
                 sw.WriteLine("ON");
                 sw.WriteLine(pin);
                 Console.Clear();
-                Console.WriteLine("Login turned ON");
+                Console.Write("Login is turned ");
+                Console.BackgroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.Write(" ON \n");
+                Console.ResetColor();
             }
             sw.Close();
             log = true;
@@ -218,13 +226,15 @@ namespace jelszokezelo
                 login[0] = sr.ReadLine();
                 login[1] = sr.ReadLine();
             }
-
             sr.Close();
         }
 
         static void Register()
         {
-            Console.WriteLine("REGISTRATION");           
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine("REGISTRATION");
+            Console.ResetColor();
             Console.Write("Add login PIN: ");
             string pass = Console.ReadLine();
 
@@ -251,17 +261,23 @@ namespace jelszokezelo
 
                 if (pass == row)
                 {
-                    Console.WriteLine("Login successfull!!");
+                    Console.Clear();
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine(" Login was successfull! ");
+                    Console.ResetColor();
                 }
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine("Wrong PIN!!!");
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine(" Wrong PIN! ");
+                    Console.ResetColor();
                     Login();
                 }
             }
             sr.Close();
-
         }
 
         static void Input() //Jelszóhosszúság ellenőrzése
@@ -927,7 +943,7 @@ namespace jelszokezelo
             Menu();
         }
         
-        static void Delete() //Jelszó adatok törlése  
+        static void Delete() //Jelszó adatok törlése
         {
             Console.Write("Please enter the website of the query! ");
             string website = Console.ReadLine();
@@ -994,8 +1010,8 @@ namespace jelszokezelo
             }
             
         }
-        /*
-         * EHHEZ SE NYÚLJ!!!!
+        
+        /* EHHEZ SE NYÚLJ!!!!
         static void Characters()
         {
             StreamWriter sw = new StreamWriter("trans.txt", false);
