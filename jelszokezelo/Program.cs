@@ -31,8 +31,11 @@ namespace jelszokezelo
         static bool log = true;
         static void Main()
         {
-            
-           
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine(" Welcome back! \n");
+            Console.ResetColor();
+
             //Characters(); // NE NYYÚLJ HOZZÁ!!! legjobb ha töröljük de véletlen se nyúlunk hozzá 
             CheckForFile("n.txt");
             LoadTranslateList("trans.txt");
@@ -133,7 +136,6 @@ namespace jelszokezelo
                     Console.Clear();
                     Menu();
                     break;
-
             }
             if (DEBUG) //DEBUG FEATURE-ÖK
             {
@@ -144,8 +146,7 @@ namespace jelszokezelo
                         FileDelete("n.txt");
                         break;
                 }
-            }
-            
+            } 
         }
 
         /* !!! NEM MŰKÖDIK EZÉRT KIMÁSOLTAM A TARTALMÁT A MAINBE !!!
@@ -696,6 +697,7 @@ namespace jelszokezelo
             if (input.ToLower() == "r")
             {
                 Console.Clear();
+                Menu();
             }
             else
             {
