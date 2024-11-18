@@ -1,15 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.Design;
-using System.Data;
-using System.Diagnostics.Tracing;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Xml.Linq;
-
-namespace jelszokezelo
+﻿namespace jelszokezelo
 {
     internal class Program
     {
@@ -176,6 +165,11 @@ namespace jelszokezelo
                 case ConsoleKey.D1:
                     TurnOffOn();
                     break;
+                default:
+                    Console.Clear();
+                    Console.WriteLine("Please choose from the options!");
+                    Settings();
+                    break;
             }
         }
 
@@ -253,9 +247,7 @@ namespace jelszokezelo
             Console.Write("PIN: ");
             string pass = Console.ReadLine();
 
-            StreamReader sr = new StreamReader("login.txt");
-
-            while(!sr.EndOfStream)
+            using (StreamReader sr = new StreamReader("login.txt"))
             {
                 sr.ReadLine();
                 string row = sr.ReadLine();
@@ -278,7 +270,6 @@ namespace jelszokezelo
                     Login();
                 }
             }
-            sr.Close();
         }
 
         static void Input() //Jelszóhosszúság ellenőrzése
@@ -448,27 +439,27 @@ namespace jelszokezelo
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
-            StreamWriter sw = new StreamWriter("n.txt", true); //true - hozzáír a fájlhoz 
-
-            switch (consoleKeyInfo.Key)
+            using (StreamWriter sw = new StreamWriter("n.txt", true)) //true - hozzáír a fájlhoz 
             {
-                case ConsoleKey.Y:
-                    sw.WriteLine($"{t_pass} {usern} {email} {website}");
-                    sw.Close();
-                    Console.Clear();
-                    Console.BackgroundColor= ConsoleColor.Green;
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.WriteLine("Password saved");
-                    Console.ResetColor();
-                    Menu();
-                    break;
-                case ConsoleKey.N:
-                    Console.Clear();
-                    sw.Close();
-                    Menu();                                     
-                    break;
-            }            
-            sw.Close();            
+                switch (consoleKeyInfo.Key)
+                {
+                    case ConsoleKey.Y:
+                        sw.WriteLine($"{t_pass} {usern} {email} {website}");
+                        sw.Close();
+                        Console.Clear();
+                        Console.BackgroundColor = ConsoleColor.Green;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine("Password saved");
+                        Console.ResetColor();
+                        Menu();
+                        break;
+                    case ConsoleKey.N:
+                        Console.Clear();
+                        sw.Close();
+                        Menu();
+                        break;
+                }
+            }
         }
 
         static void Save() //Jelszó mentése egy txt fájlba
@@ -531,48 +522,46 @@ namespace jelszokezelo
         {
             passwords.Clear();
 
-            StreamReader sr = new StreamReader(file);
-
-            while (!sr.EndOfStream)
+            using (StreamReader sr = new StreamReader(file))
             {
-                string row = sr.ReadLine();
-                string[] data = row.Split(" ");
-
-                Passwords pass = new Passwords();
-
-                try //megnézi, hogy beolvashatóak-e az adatok
+                while (!sr.EndOfStream)
                 {
-                    string t_pass = "";
+                    string row = sr.ReadLine();
+                    string[] data = row.Split(" ");
 
-                    for (int i = 0; i < data[0].Length; i++)
+                    Passwords pass = new Passwords();
+
+                    try //megnézi, hogy beolvashatóak-e az adatok
                     {
-                        foreach (Translate item1 in tranlate)
+                        string t_pass = "";
+
+                        for (int i = 0; i < data[0].Length; i++)
                         {
-                            if (item1.letter.ToString() == data[0][i].ToString())
+                            foreach (Translate item1 in tranlate)
                             {
-                                t_pass += item1.code + "|";
+                                if (item1.letter.ToString() == data[0][i].ToString())
+                                {
+                                    t_pass += item1.code + "|";
+                                }
                             }
                         }
+
+                        pass.password = t_pass;
+                        pass.username = data[1];
+                        pass.email = data[2];
+                        pass.website = data[3];
+
+                        passwords.Add(pass);
                     }
-
-                    pass.password = t_pass;
-                    pass.username = data[1];
-                    pass.email = data[2];
-                    pass.website = data[3];
-
-                    passwords.Add(pass);
+                    catch { } //ha nem, akkor nem csinál semmit xd
                 }
-                catch { } //ha nem, akkor nem csinál semmit xd*/
             }
-            sr.Close();
 
-            StreamWriter sw = new StreamWriter(file, false);
-
-            foreach (var item in passwords)
+            using (StreamWriter sw = new StreamWriter(file, false))
             {
-                sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");
+                foreach (var item in passwords)
+                    sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");
             }
-            sw.Close();
         }
 
         static void Translator()
@@ -594,66 +583,66 @@ namespace jelszokezelo
         static void LoadTranslateList(string file)
         {
             tranlate.Clear();
-            StreamReader sr = new StreamReader(file);
-
-            while (!sr.EndOfStream)
+            using (StreamReader sr = new StreamReader(file))
             {
-                string row = sr.ReadLine();
-                string[] data = row.Split(" ");
-                Translate character = new Translate();
-                character.letter = data[0];
-                character.code = data[1];
-                tranlate.Add(character);
+                while (!sr.EndOfStream)
+                {
+                    string row = sr.ReadLine();
+                    string[] data = row.Split(" ");
+                    Translate character = new Translate();
+                    character.letter = data[0];
+                    character.code = data[1];
+                    tranlate.Add(character);
+                }
             }
-            sr.Close();
         }
 
         static void Load(string file) //Jelszavak betöltése
         {
             passwords.Clear();
-            n = 0;            
+            n = 0;
 
-            StreamReader sr = new StreamReader(file);
-
-            while (!sr.EndOfStream)
+            using (StreamReader sr = new StreamReader(file))
             {
-                string row = sr.ReadLine();
-                string[] data = row.Split(" ");                
-                
-                Passwords pass = new Passwords();
-
-                try //megnézi, hogy beolvashatóak-e az adatok
-                {                    
-                    pass.password = data[0];
-                    pass.username = data[1];
-                    pass.email = data[2];
-                    pass.website = data[3];                    
-
-                    passwords.Add(pass);  
-                }
-                catch { } //ha nem, akkor nem csinál semmit xd*/
-            }
-            sr.Close();
-
-            StreamReader sr1 = new StreamReader(file);
-
-            while (!sr1.EndOfStream)
-            {
-                string row = sr1.ReadLine();
-                string[] data = row.Split(" ");                
-
-                try //megnézi, hogy beolvashatóak-e az adatok
+                while (!sr.EndOfStream)
                 {
-                    passwords1[n].password = data[0];
-                    passwords1[n].username = data[1];
-                    passwords1[n].email = data[2];
-                    passwords1[n].website = data[3];
+                    string row = sr.ReadLine();
+                    string[] data = row.Split(" ");
 
-                    n++;
+                    Passwords pass = new Passwords();
+
+                    try //megnézi, hogy beolvashatóak-e az adatok
+                    {
+                        pass.password = data[0];
+                        pass.username = data[1];
+                        pass.email = data[2];
+                        pass.website = data[3];
+
+                        passwords.Add(pass);
+                    }
+                    catch { } //ha nem, akkor nem csinál semmit xd
                 }
-                catch { } //ha nem, akkor nem csinál semmit xd
             }
-            sr1.Close();
+
+            using (StreamReader sr = new StreamReader(file))
+            {
+                while (!sr.EndOfStream)
+                {
+                    string row = sr.ReadLine();
+                    string[] data = row.Split(" ");
+
+                    try //megnézi, hogy beolvashatóak-e az adatok
+                    {
+                        passwords1[n].password = data[0];
+                        passwords1[n].username = data[1];
+                        passwords1[n].email = data[2];
+                        passwords1[n].website = data[3];
+
+                        n++;
+                    }
+                    catch { } //ha nem, akkor nem csinál semmit xd
+                }
+            }
         }
 
         static void Query() //Jelszavak kiíratása
@@ -791,19 +780,20 @@ namespace jelszokezelo
                 }
             }
 
-            StreamWriter sw = new StreamWriter("n.txt", false);
-
-            for (int i = 0; i < n; i++)
+            using (StreamWriter sw = new StreamWriter("n.txt", false))
             {
-                if (passwords1[i].password == t_pass)
+                for (int i = 0; i < n; i++)
                 {
-                    passwords1[i].website = newWebsite;
-                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {newWebsite}");
+                    if (passwords1[i].password == t_pass)
+                    {
+                        passwords1[i].website = newWebsite;
+                        sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {newWebsite}");
+                    }
+                    else
+                        sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
                 }
-                else
-                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
             }
-            sw.Close();
+
             Console.Clear();
             Menu();
         }
@@ -838,19 +828,20 @@ namespace jelszokezelo
                 }
             }
 
-            StreamWriter sw = new StreamWriter("n.txt", false);
-
-            for (int i = 0; i < n; i++)
+            using (StreamWriter sw = new StreamWriter("n.txt", false))
             {
-                if (passwords1[i].password == t_pass)
+                for (int i = 0; i < n; i++)
                 {
-                    passwords1[i].email = newEmail;
-                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {newEmail} {passwords1[i].website}");
+                    if (passwords1[i].password == t_pass)
+                    {
+                        passwords1[i].email = newEmail;
+                        sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {newEmail} {passwords1[i].website}");
+                    }
+                    else
+                        sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
                 }
-                else
-                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
             }
-            sw.Close();
+
             Console.Clear();
             Menu();
         }
@@ -885,20 +876,21 @@ namespace jelszokezelo
                 }
             }
 
-            StreamWriter sw = new StreamWriter("n.txt", false);
-
-            for (int i = 0; i < n; i++)
+            using (StreamWriter sw = new StreamWriter("n.txt", false))
             {
-                
-                if (passwords1[i].password == t_pass)
+                for (int i = 0; i < n; i++)
                 {
-                    passwords1[i].username = newUsername;
-                    sw.WriteLine($"{passwords1[i].password} {newUsername} {passwords1[i].email} {passwords1[i].website}");
+
+                    if (passwords1[i].password == t_pass)
+                    {
+                        passwords1[i].username = newUsername;
+                        sw.WriteLine($"{passwords1[i].password} {newUsername} {passwords1[i].email} {passwords1[i].website}");
+                    }
+                    else
+                        sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
                 }
-                else
-                    sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {passwords1[i].website}");
             }
-            sw.Close();
+
             Console.WriteLine();
             Console.WriteLine();
             Console.Clear();
@@ -943,13 +935,13 @@ namespace jelszokezelo
                 }
             }
 
-            StreamWriter sw = new StreamWriter("n.txt", false); //újraírja a fájlt
-
-            foreach (Passwords item in passwords)
-            {                
-                sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");                               
+            using (StreamWriter sw = new StreamWriter("n.txt", false)) //újraírja a fájlt
+            {
+                foreach (Passwords item in passwords)
+                {
+                    sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");
+                }
             }
-            sw.Close();
 
             if (found)
             {
