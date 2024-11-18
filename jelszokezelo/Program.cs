@@ -68,6 +68,7 @@ namespace jelszokezelo
                     }
                 }
             }
+            Menu();
         }
 
         static void LoginCheck()
@@ -413,22 +414,22 @@ namespace jelszokezelo
             {
                 Console.Write("Username: ");
                 usern = Console.ReadLine();
-            } while (usern == "");
+            } while (usern == "" || usern.Contains(" "));
             do
             {
                 Console.Write("Email: ");
                 email = Console.ReadLine();
-            } while (email == "");
+            } while (email == "" || email.Contains(" "));
             do
             {
                 Console.Write("Website: ");
                 website = Console.ReadLine();
-            } while (website == "");
+            } while (website == "" || website.Contains(" "));
             do
             {
                 Console.Write("Password: ");
                 password = Console.ReadLine();
-            } while (password == "");
+            } while (password == "" || password.Contains(" "));
 
             Console.Write("Check it! Is it right? Want to save it? Y/N: ");
 
@@ -478,11 +479,8 @@ namespace jelszokezelo
 
             ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
             string usern;
-            bool b_usern = true;
             string email;
-            bool b_email = true;
             string website;
-            bool b_website = true;
           
             switch (consoleKeyInfo.Key)
             {
@@ -492,55 +490,19 @@ namespace jelszokezelo
                     {
                         Console.Write("Username: ");
                         usern = Console.ReadLine();
-                        for (int i = 0; i < usern.Length; i++)
-                        {
-                            if (usern[i] == ' ')
-                            {
-                                b_usern = true;
-                                break;
-                            }
-                            else
-                            {
-                                b_usern = false;
-                            }
-                        }
-                    } while (b_usern);
+                    } while (usern.Contains(" ") || usern == "");
 
                     do
                     {
                         Console.Write("Email: ");
                         email = Console.ReadLine();
-                        for(int i = 0; i < email.Length; i++)
-                        {
-                            if (email[i] == ' ')
-                            {
-                                b_email = true;
-                                break;
-                            }
-                            else
-                            {
-                                b_email = false;
-                            }
-                        }
-                    } while (b_email);
+                    } while (email.Contains(" ") || email == "");
 
                     do
                     {
                         Console.Write("Website: ");
                         website = Console.ReadLine();
-                        for ( int i = 0; i < website.Length; i++)
-                        {
-                            if (website[i] == ' ')
-                            {
-                                b_website = true;
-                                break;
-                            }
-                            else
-                            {
-                                b_website = false;
-                            }
-                        }
-                    } while (b_website);
+                    } while (website.Contains(" ") || website == "");
 
                     sw.WriteLine($"{pass} {usern} {email} {website}");
                     sw.Close();
