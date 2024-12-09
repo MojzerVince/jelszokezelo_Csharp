@@ -33,35 +33,7 @@ namespace jelszokezelo
             //Characters(); // NE NYYÚLJ HOZZÁ!!! legjobb ha töröljük de véletlen se nyúlunk hozzá 
             CheckForFile("n.txt");
             LoadTranslateList("trans.txt");
-            Load("n.txt");
-
-            //Felismeri ha a txt-ben régebbi verziójú átfordítatlan jelszavak vannak, ennek függvényében ha szükséges akkor frissül a txt-ben lévvő összes jelszó!!
-            bool one = true;
-
-            while (one)
-            {
-                for (int i = 0; i < 1; i++)
-                {
-                    if (passwords.Count() > 0)
-                    {
-                        if (passwords1[i].password.Length > 21)
-                        {
-                            Load("n.txt"); //mentett jelszavak betöltése
-                            one = false;                         
-                        }
-                        else if (passwords1[i].password.Length < 21)
-                        {
-                            VersionUpdate("n.txt");
-                            one = false;
-                        }
-                    }
-                    else if (passwords.Count() < 1) //nem működik
-                    {
-                        Menu();
-                        one = false;
-                    }
-                }
-            }
+            Load("n.txt");           
             Menu();
         }
 
@@ -364,6 +336,7 @@ namespace jelszokezelo
                 hasLowerChar = false;
                 hasNumber = false;
                 hasSymbol = false;
+
                 for (int i = 0; i < passLength; i++)
                 {
                     Random r = new Random();
@@ -372,7 +345,7 @@ namespace jelszokezelo
                     pass += chars[index];
                 }                
 
-                for (int i = 0; i < pass.Length; i++)
+                for (int i = 0; i < passLength; i++)
                 {
                     if (char.IsUpper(pass[i]))
                     {
@@ -564,6 +537,7 @@ namespace jelszokezelo
             pass = password;         
         }
 
+        //NINCS HASZNÁLATBAN
         static string TranslateInverse(string[] split)
         {
             string t_pass = "";
