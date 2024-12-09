@@ -1,4 +1,7 @@
-﻿namespace jelszokezelo
+﻿using System.Reflection;
+using System.Xml.Serialization;
+
+namespace jelszokezelo
 {
     internal class Program
     {
@@ -778,36 +781,34 @@
             }
         }
 
-        static void NewWebsite()
-        {            
-            Console.Write("Please enter the new website: ");
-            string newWebsite = Console.ReadLine();
-
+        static string TranslateInverse(string[] split)
+        {
             string t_pass = "";
 
-            foreach (Passwords item in passwords)
+            for (int i = 0; i < split.Length; i++)
             {
-                if (item.website == actualQuery.website && item.email == actualQuery.email)
+                foreach (Translate item1 in tranlate)
                 {
-                    string[] spliteltpass = item.password.Split("|");
-                    for (int i = 0; i < spliteltpass.Length; i++)
+                    if (item1.code.ToString() == split[i].ToString())
                     {
-                        foreach (Translate item1 in tranlate)
-                        {
-                            if (item1.code.ToString() == spliteltpass[i].ToString())
-                            {
-                                t_pass += item1.code + "|";
-                            }
-                        }
+                        t_pass += item1.code + "|";
                     }
                 }
             }
+            return t_pass;
+        }
+
+        static void NewWebsite()
+        {            
+            Console.Write("Please enter the new website: ");
+            string newWebsite = Console.ReadLine();            
 
             using (StreamWriter sw = new StreamWriter("n.txt", false))
             {
                 for (int i = 0; i < n; i++)
                 {
-                    if (passwords1[i].password == t_pass)
+                    //átirandó !!!!!!!
+                    if (passwords1[i].password == actualQuery.password)
                     {
                         passwords1[i].website = newWebsite;
                         sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {passwords1[i].email} {newWebsite}");
@@ -825,32 +826,13 @@
         {           
             Console.Write("Please enter the new email: ");
             string newEmail = Console.ReadLine();
-
-            string t_pass = "";
-
-            foreach (Passwords item in passwords)
-            {
-                if (item.website == actualQuery.website && item.email == actualQuery.email)
-                {
-                    string[] spliteltpass = item.password.Split("|");
-                    for (int i = 0; i < spliteltpass.Length; i++)
-                    {
-                        foreach (Translate item1 in tranlate)
-                        {
-                            if (item1.code.ToString() == spliteltpass[i].ToString())
-                            {
-                                t_pass += item1.code + "|";
-                            }
-                        }
-                    }
-                }
-            }
-
+            
             using (StreamWriter sw = new StreamWriter("n.txt", false))
             {
                 for (int i = 0; i < n; i++)
                 {
-                    if (passwords1[i].password == t_pass)
+                    //átirandó
+                    if (passwords1[i].password == actualQuery.password)
                     {
                         passwords1[i].email = newEmail;
                         sw.WriteLine($"{passwords1[i].password} {passwords1[i].username} {newEmail} {passwords1[i].website}");
@@ -867,34 +849,14 @@
         static void NewUsername()
         {
             Console.Write("Please enter the new username: ");
-            string newUsername = Console.ReadLine();
-
-            string t_pass = "";
-
-            foreach (Passwords item in passwords)
-            {
-                if (item.website == actualQuery.website && item.email == actualQuery.email)
-                {
-                    string[] spliteltpass = item.password.Split("|");
-                    for (int i = 0; i < spliteltpass.Length; i++)
-                    {
-                        foreach (Translate item1 in tranlate)
-                        {
-                            if (item1.code.ToString() == spliteltpass[i].ToString())
-                            {
-                                t_pass += item1.code + "|";
-                            }
-                        }
-                    }
-                }
-            }
+            string newUsername = Console.ReadLine();           
 
             using (StreamWriter sw = new StreamWriter("n.txt", false))
             {
                 for (int i = 0; i < n; i++)
                 {
-
-                    if (passwords1[i].password == t_pass)
+                    //átirandó
+                    if (passwords1[i].password == actualQuery.password)
                     {
                         passwords1[i].username = newUsername;
                         sw.WriteLine($"{passwords1[i].password} {newUsername} {passwords1[i].email} {passwords1[i].website}");
@@ -911,32 +873,12 @@
         }
         
         static void Delete() //Jelszó adatok törlése
-        {
-            string t_pass = "";
-
-            foreach (Passwords item in passwords)
-            {
-                if (item.website == actualQuery.website && item.email == actualQuery.email)
-                {
-                    string[] spliteltpass = item.password.Split("|");
-                    for (int i = 0; i < spliteltpass.Length; i++)
-                    {
-                        foreach (Translate item1 in tranlate)
-                        {
-                            if (item1.code.ToString() == spliteltpass[i].ToString())
-                            {
-                                t_pass += item1.code + "|";
-                            }
-                        }
-                    }
-                }
-            }
-
+        {            
             bool found = false;
              
             for (int i = 0; i < n ; i++) 
             { 
-                if (passwords1[i].password == t_pass)
+                if (passwords1[i].password == actualQuery.password)
                 {
                     found = true;                    
                     passwords.RemoveAt(i);
