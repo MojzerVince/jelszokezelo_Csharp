@@ -348,16 +348,46 @@
         static void PassGenerator() //Jelszó karaktereinek generálása
         {
             //byte szamE;
+            bool hasUpperChar;
+            bool hasLowerChar;
+            bool hasNumber;
+            bool hasSymbol;
 
-            for (int i = 0; i < passLength; i++)
-            {
-                Random r = new Random();
-                index = r.Next(0, chars.Count()); //0 és a karakterek száma közt dob egy random számot
-                
-                pass += chars[index];
+            do
+            {               
+                hasUpperChar = false;
+                hasLowerChar = false;
+                hasNumber = false;
+                hasSymbol = false;
+                for (int i = 0; i < passLength; i++)
+                {
+                    Random r = new Random();
+                    index = r.Next(0, chars.Count()); 
 
-                //Console.WriteLine($"{i + 1}. Karakter: {chars[index]}");
+                    pass += chars[index];
+                }                
+
+                for (int i = 0; i < pass.Length; i++)
+                {
+                    if (char.IsUpper(pass[i]))
+                    {
+                        hasUpperChar = true;
+                    }
+                    if (char.IsLower(pass[i]))
+                    {
+                        hasLowerChar = true;
+                    }
+                    if (char.IsDigit(pass[i]))
+                    {
+                        hasNumber = true;
+                    }
+                    if (char.IsSymbol(pass[i]))
+                    {
+                        hasSymbol = true;
+                    }
+                }
             }
+            while (hasUpperChar == false && hasLowerChar == false && hasNumber == false && hasSymbol == false);                  
 
             Console.WriteLine();
             Console.Write($"Pass: ");
@@ -366,11 +396,6 @@
             Console.Write($"{pass}");
             Console.ResetColor();
             Console.WriteLine();
-
-            /*Console.WriteLine($"Number random indexe: {numberIndex}");
-            Console.WriteLine($"Lowercase random indexe: {lowerCaseIndex}");
-            Console.WriteLine($"Uppercase random indexe: {upperCaseIndex}");
-            Console.WriteLine($"Special Character indexe: {specialCharacterIndex}");*/
 
             //Console.WriteLine();
             //Console.WriteLine(pass.Count());
