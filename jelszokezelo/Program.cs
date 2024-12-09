@@ -546,53 +546,7 @@ namespace jelszokezelo
                     Save();
                     break;
             }
-        }
-
-        static void VersionUpdate(string file)
-        {
-            passwords.Clear();
-
-            using (StreamReader sr = new StreamReader(file))
-            {
-                while (!sr.EndOfStream)
-                {
-                    string row = sr.ReadLine();
-                    string[] data = row.Split(" ");
-
-                    Passwords pass = new Passwords();
-
-                    try //megnézi, hogy beolvashatóak-e az adatok
-                    {
-                        string t_pass = "";
-
-                        for (int i = 0; i < data[0].Length; i++)
-                        {
-                            foreach (Translate item1 in tranlate)
-                            {
-                                if (item1.letter.ToString() == data[0][i].ToString())
-                                {
-                                    t_pass += item1.code + "|";
-                                }
-                            }
-                        }
-
-                        pass.password = t_pass;
-                        pass.username = data[1];
-                        pass.email = data[2];
-                        pass.website = data[3];
-
-                        passwords.Add(pass);
-                    }
-                    catch { } //ha nem, akkor nem csinál semmit xd
-                }
-            }
-
-            using (StreamWriter sw = new StreamWriter(file, false))
-            {
-                foreach (var item in passwords)
-                    sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");
-            }
-        }
+        }       
 
         static void Translator()
         {
@@ -607,7 +561,24 @@ namespace jelszokezelo
                     }
                 }
             }
-            pass = password;
+            pass = password;         
+        }
+
+        static string TranslateInverse(string[] split)
+        {
+            string t_pass = "";
+
+            for (int i = 0; i < split.Length; i++)
+            {
+                foreach (Translate item1 in tranlate)
+                {
+                    if (item1.code.ToString() == split[i].ToString())
+                    {
+                        t_pass += item1.code + "|";
+                    }
+                }
+            }
+            return t_pass;
         }
 
         static void LoadTranslateList(string file)
@@ -781,22 +752,6 @@ namespace jelszokezelo
             }
         }
 
-        static string TranslateInverse(string[] split)
-        {
-            string t_pass = "";
-
-            for (int i = 0; i < split.Length; i++)
-            {
-                foreach (Translate item1 in tranlate)
-                {
-                    if (item1.code.ToString() == split[i].ToString())
-                    {
-                        t_pass += item1.code + "|";
-                    }
-                }
-            }
-            return t_pass;
-        }
 
         static void NewWebsite()
         {            
