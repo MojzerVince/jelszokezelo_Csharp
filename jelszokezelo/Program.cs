@@ -18,6 +18,8 @@
         static bool DEBUG = true; //Kiadásnál át kell rakni false-ra és minden debug funkció kikapcsol majd
 
         static bool log = true;
+
+        static Passwords actualQuery;
         static void Main()
         {
             Console.BackgroundColor = ConsoleColor.White;
@@ -712,6 +714,7 @@
                         Console.WriteLine($"Website: {item.website} \nEmail: {item.email}\nUsername: {item.username}\nPassword: {t_pass} \n");
                         Console.WriteLine();
                         t_pass = "";
+                        actualQuery = item;
                     }
                 }
 
@@ -776,12 +779,7 @@
         }
 
         static void NewWebsite()
-        {
-            Console.Write("Please enter the website of the query! ");
-            string website = Console.ReadLine();
-            Console.Write("Please enter the email of the query! ");
-            string email = Console.ReadLine();
-
+        {            
             Console.Write("Please enter the new website: ");
             string newWebsite = Console.ReadLine();
 
@@ -789,7 +787,7 @@
 
             foreach (Passwords item in passwords)
             {
-                if (item.website == website && item.email == email)
+                if (item.website == actualQuery.website && item.email == actualQuery.email)
                 {
                     string[] spliteltpass = item.password.Split("|");
                     for (int i = 0; i < spliteltpass.Length; i++)
@@ -824,12 +822,7 @@
         }
 
         static void NewEmail()
-        {
-            Console.Write("Please enter the website of the query! ");
-            string website = Console.ReadLine();
-            Console.Write("Please enter the email of the query! ");
-            string email = Console.ReadLine();
-
+        {           
             Console.Write("Please enter the new email: ");
             string newEmail = Console.ReadLine();
 
@@ -837,7 +830,7 @@
 
             foreach (Passwords item in passwords)
             {
-                if (item.website == website && item.email == email)
+                if (item.website == actualQuery.website && item.email == actualQuery.email)
                 {
                     string[] spliteltpass = item.password.Split("|");
                     for (int i = 0; i < spliteltpass.Length; i++)
@@ -873,11 +866,6 @@
 
         static void NewUsername()
         {
-            Console.Write("Please enter the website of the query! ");
-            string website = Console.ReadLine();
-            Console.Write("Please enter the email of the query! ");
-            string email = Console.ReadLine();
-
             Console.Write("Please enter the new username: ");
             string newUsername = Console.ReadLine();
 
@@ -885,7 +873,7 @@
 
             foreach (Passwords item in passwords)
             {
-                if (item.website == website && item.email == email)
+                if (item.website == actualQuery.website && item.email == actualQuery.email)
                 {
                     string[] spliteltpass = item.password.Split("|");
                     for (int i = 0; i < spliteltpass.Length; i++)
@@ -924,16 +912,11 @@
         
         static void Delete() //Jelszó adatok törlése
         {
-            Console.Write("Please enter the website of the query! ");
-            string website = Console.ReadLine();
-            Console.Write("Please enter the email of the query! ");
-            string email = Console.ReadLine();
-
             string t_pass = "";
 
             foreach (Passwords item in passwords)
             {
-                if (item.website == website && item.email == email)
+                if (item.website == actualQuery.website && item.email == actualQuery.email)
                 {
                     string[] spliteltpass = item.password.Split("|");
                     for (int i = 0; i < spliteltpass.Length; i++)
