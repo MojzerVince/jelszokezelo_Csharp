@@ -499,6 +499,7 @@ namespace jelszokezelo
                         website = Console.ReadLine();
                     } while (website.Contains(" ") || website == "");
 
+                    //1.5.5 után
                     for (int i = 0; i < pass.Length; i++)
                     {
                         if (passwords[i].email == email && passwords[i].website == website)
