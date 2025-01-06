@@ -90,6 +90,8 @@ namespace jelszokezelo
                 case ConsoleKey.Escape:
                     Console.Clear();
                     Console.WriteLine("Exiting...");
+                    Thread.Sleep(500);
+                    Environment.Exit(0);
                     break;
                 case ConsoleKey.NumPad2:
                 case ConsoleKey.D2:
