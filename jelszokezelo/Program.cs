@@ -499,6 +499,17 @@ namespace jelszokezelo
                         website = Console.ReadLine();
                     } while (website.Contains(" ") || website == "");
 
+                    for (int i = 0; i < pass.Length; i++)
+                    {
+                        if (passwords[i].email == email && passwords[i].website == website)
+                        {
+                            sw.Close();
+                            Console.Clear();
+                            Console.WriteLine("Password not saved, email already exists with this website");
+                            break;
+                        }
+                    }
+
                     sw.WriteLine($"{pass} {usern} {email} {website}");
                     sw.Close();
                     Console.Clear();
