@@ -90,6 +90,8 @@ namespace jelszokezelo
                 case ConsoleKey.Escape:
                     Console.Clear();
                     Console.WriteLine("Exiting...");
+                    Thread.Sleep(500);
+                    Environment.Exit(0);
                     break;
                 case ConsoleKey.NumPad2:
                 case ConsoleKey.D2:
@@ -152,43 +154,44 @@ namespace jelszokezelo
 
         static void TurnOffOn()
         {
-            StreamReader sr = new StreamReader("login.txt");
-            sr.ReadLine();
-            string pin = sr.ReadLine();
-            sr.Close();
-
-            StreamWriter sw = new StreamWriter("login.txt", false);
-
-            Console.Write("Do you want to turn off / on login section? Write \"off\"/\"on\": ");
-            string inp = Console.ReadLine().ToUpper();
-
-            if (inp == "OFF")
+            using (StreamReader sr = new StreamReader("login.txt"))
             {
-                sw.WriteLine("OFF");
-                Console.Clear();
-                Console.Write("Login is turned ");
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.Write(" OFF \n");
-                Console.ResetColor();
-            }
-            else if (inp == "ON")
-            {
-                sw.WriteLine("ON");
-                sw.WriteLine(pin);
-                Console.Clear();
-                Console.Write("Login is turned ");
-                Console.BackgroundColor = ConsoleColor.Green;
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.Write(" ON \n");
-                Console.ResetColor();
-            }
-            sw.Close();
-            log = true;
+                sr.ReadLine();
+                string pin = sr.ReadLine();
 
-            Menu();
+                using (StreamWriter sw = new StreamWriter("login.txt", false))
+                {
+
+                    Console.Write("Do you want to turn off / on login section? Write \"off\"/\"on\": ");
+                    string inp = Console.ReadLine().ToUpper();
+
+                    if (inp == "OFF")
+                    {
+                        sw.WriteLine("OFF");
+                        Console.Clear();
+                        Console.Write("Login is turned ");
+                        Console.BackgroundColor = ConsoleColor.Red;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.Write(" OFF \n");
+                        Console.ResetColor();
+                    }
+                    else if (inp == "ON")
+                    {
+                        sw.WriteLine("ON");
+                        sw.WriteLine(pin);
+                        Console.Clear();
+                        Console.Write("Login is turned ");
+                        Console.BackgroundColor = ConsoleColor.Green;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.Write(" ON \n");
+                        Console.ResetColor();
+                    }
+                    log = true;
+
+                    Menu();
+                }
+            }
         }
-
         static void LoginLoad(string file)
         {
             StreamReader sr = new StreamReader(file);
@@ -497,6 +500,18 @@ namespace jelszokezelo
                         Console.Write("Website: ");
                         website = Console.ReadLine();
                     } while (website.Contains(" ") || website == "");
+
+                    //1.5.5 után
+                    for (int i = 0; i < pass.Length; i++)
+                    {
+                        if (passwords[i].email == email && passwords[i].website == website)
+                        {
+                            sw.Close();
+                            Console.Clear();
+                            Console.WriteLine("Password not saved, email already exists with this website");
+                            break;
+                        }
+                    }
 
                     sw.WriteLine($"{pass} {usern} {email} {website}");
                     sw.Close();
@@ -848,7 +863,7 @@ namespace jelszokezelo
         static void Characters()
         {
             StreamWriter sw = new StreamWriter("trans.txt", false);
-            
+
             for (int j = 0; j < chars.Length; j++)
             {
                 Random r = new Random();
