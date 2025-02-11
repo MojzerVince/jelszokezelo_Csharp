@@ -5,19 +5,19 @@ namespace jelszokezelo
 {
     internal class Program
     {
-        static List<Passwords> passwords = new List<Passwords>(); 
-        static Passwords[] passwords1 = new Passwords[50];        
+        static List<Passwords> passwords = new List<Passwords>();
+        static Passwords[] passwords1 = new Passwords[50];
         static List<Translate> tranlate = new List<Translate>();
         static string[] login = new string[2];
-      
+
         static int n = 0;
 
-        static string[] chars = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "!", "@", "#", "$", "%", "&", "*", "(", ")", "_", "+", "-", "=", "{", "}", "[", "]", ":", ";", "'", "<", ">", ",", ".", "?", "/"};
+        static string[] chars = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "!", "@", "#", "$", "%", "&", "*", "(", ")", "_", "+", "-", "=", "{", "}", "[", "]", ":", ";", "'", "<", ">", ",", ".", "?", "/" };
         static int index = 0; //random választott betűk indexe
         static byte passLength = 0;
 
         static string pass = ""; //jelszó változó     
-      
+
         static bool DEBUG = true; //Kiadásnál át kell rakni false-ra és minden debug funkció kikapcsol majd
 
         static bool log = true;
@@ -33,7 +33,7 @@ namespace jelszokezelo
             //Characters(); // NE NYYÚLJ HOZZÁ!!! legjobb ha töröljük de véletlen se nyúlunk hozzá 
             CheckForFile("n.txt");
             LoadTranslateList("trans.txt");
-            Load("n.txt");           
+            Load("n.txt");
             Menu();
         }
 
@@ -66,21 +66,21 @@ namespace jelszokezelo
         {
             Load("n.txt");
             if (log == true)
-            {                
+            {
                 LoginCheck();
             }
             log = false;
             Console.WriteLine("Options:   | 0: Generate new password | 1: Show passwords | 2: Add an existing password | 3: Settings | ESC: Exit");
 
-            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);            
-            
+            ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+
             switch (consoleKeyInfo.Key)
             {
                 case ConsoleKey.NumPad0:
                 case ConsoleKey.D0:
                     Console.Clear();
-                    Input();               
-                    Translator();                    
+                    Input();
+                    Translator();
                     break;
                 case ConsoleKey.NumPad1:
                 case ConsoleKey.D1:
@@ -99,21 +99,21 @@ namespace jelszokezelo
                 case ConsoleKey.D3:
                     Settings();
                     break;
+                case ConsoleKey.NumPad8:
+                case ConsoleKey.D8:
+                    if(DEBUG)
+                        FileDelete("n.txt");
+                    break;
+                case ConsoleKey.NumPad9:
+                case ConsoleKey.D9:
+                    if(DEBUG)
+                        FileExport();
+                    break;
                 default:
                     Console.Clear();
                     Menu();
                     break;
             }
-            if (DEBUG) //DEBUG FEATURE-ÖK
-            {
-                switch (consoleKeyInfo.Key)
-                {
-                    case ConsoleKey.NumPad9:
-                    case ConsoleKey.D9: //DEBUG ONLY
-                        FileDelete("n.txt");
-                        break;
-                }
-            } 
         }
 
         /* !!! NEM MŰKÖDIK EZÉRT KIMÁSOLTAM A TARTALMÁT A MAINBE !!!
@@ -220,7 +220,7 @@ namespace jelszokezelo
 
         static void Login()
         {
-            Console.WriteLine("LOGIN");            
+            Console.WriteLine("LOGIN");
             Console.Write("PIN: ");
             string pass = Console.ReadLine();
 
@@ -319,7 +319,7 @@ namespace jelszokezelo
                     Console.Clear();
                     Menu();
                     break;
-            }            
+            }
         }
 
         static void PassGenerator() //Jelszó karaktereinek generálása
@@ -331,7 +331,7 @@ namespace jelszokezelo
             bool hasSymbol;
 
             do
-            {               
+            {
                 hasUpperChar = false;
                 hasLowerChar = false;
                 hasNumber = false;
@@ -340,10 +340,10 @@ namespace jelszokezelo
                 for (int i = 0; i < passLength; i++)
                 {
                     Random r = new Random();
-                    index = r.Next(0, chars.Count()); 
+                    index = r.Next(0, chars.Count());
 
                     pass += chars[index];
-                }                
+                }
 
                 for (int i = 0; i < passLength; i++)
                 {
@@ -365,7 +365,7 @@ namespace jelszokezelo
                     }
                 }
             }
-            while (hasUpperChar == false && hasLowerChar == false && hasNumber == false && hasSymbol == false);                  
+            while (hasUpperChar == false && hasLowerChar == false && hasNumber == false && hasSymbol == false);
 
             Console.WriteLine();
             Console.Write($"Pass: ");
@@ -398,7 +398,7 @@ namespace jelszokezelo
         }
 
         static void AddPass() //Custom jelszó hozzáadás
-        { 
+        {
             string usern;
             string email;
             string website;
@@ -475,7 +475,7 @@ namespace jelszokezelo
             string usern;
             string email;
             string website;
-          
+
             switch (consoleKeyInfo.Key)
             {
                 case ConsoleKey.Y:
@@ -519,7 +519,7 @@ namespace jelszokezelo
                     Save();
                     break;
             }
-        }       
+        }
 
         static void Translator()
         {
@@ -534,7 +534,7 @@ namespace jelszokezelo
                     }
                 }
             }
-            pass = password;         
+            pass = password;
         }
 
         //NINCS HASZNÁLATBAN
@@ -728,9 +728,9 @@ namespace jelszokezelo
 
 
         static void NewWebsite()
-        {            
+        {
             Console.Write("Please enter the new website: ");
-            string newWebsite = Console.ReadLine();            
+            string newWebsite = Console.ReadLine();
 
             using (StreamWriter sw = new StreamWriter("n.txt", false))
             {
@@ -752,10 +752,10 @@ namespace jelszokezelo
         }
 
         static void NewEmail()
-        {           
+        {
             Console.Write("Please enter the new email: ");
             string newEmail = Console.ReadLine();
-            
+
             using (StreamWriter sw = new StreamWriter("n.txt", false))
             {
                 for (int i = 0; i < n; i++)
@@ -778,7 +778,7 @@ namespace jelszokezelo
         static void NewUsername()
         {
             Console.Write("Please enter the new username: ");
-            string newUsername = Console.ReadLine();           
+            string newUsername = Console.ReadLine();
 
             using (StreamWriter sw = new StreamWriter("n.txt", false))
             {
@@ -800,16 +800,16 @@ namespace jelszokezelo
             Console.Clear();
             Menu();
         }
-        
+
         static void Delete() //Jelszó adatok törlése
-        {            
+        {
             bool found = false;
-             
-            for (int i = 0; i < n ; i++) 
-            { 
+
+            for (int i = 0; i < n; i++)
+            {
                 if (passwords1[i].password == actualQuery.password)
                 {
-                    found = true;                    
+                    found = true;
                     passwords.RemoveAt(i);
                 }
             }
@@ -831,7 +831,7 @@ namespace jelszokezelo
                 Console.ResetColor();
                 Menu();
                 Console.WriteLine();
-            }            
+            }
 
             if (!found) //ha nem találja a törlendő jelszót, akkor újra meg kell adni, ez amúgy egy végtelen ciklus
             {
@@ -841,9 +841,9 @@ namespace jelszokezelo
                 Console.ResetColor();
                 Delete();
             }
-            
+
         }
-        
+
         /* EHHEZ SE NYÚLJ!!!!
         static void Characters()
         {
@@ -864,7 +864,7 @@ namespace jelszokezelo
             sw.Close();
         }
         */
-    
+
         static void CheckForFile(string file)
         {
             if (!File.Exists(file))
@@ -873,8 +873,8 @@ namespace jelszokezelo
                 fs.Close();
             }
         }
-        
-        static void FileDelete(string file) //DEBUG ONLY, fájltörlés
+
+        static void FileDelete(string file) //DEBUG ONLY, fájl törlés
         {
             File.Delete(file);
             Console.Clear();
@@ -883,6 +883,23 @@ namespace jelszokezelo
             Console.WriteLine("Password File Deleted!");
             Console.ResetColor();
 
+            Menu();
+        }
+
+        static void FileExport() //DEBUG ONLY, fájl exportálás
+        {
+            File.Create("export.txt").Close();
+            StreamWriter sw = new StreamWriter("export.txt", false);
+
+            foreach (Passwords item in passwords)
+                sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");
+            sw.Close();
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.WriteLine("Password File Exported!");
+            Console.ResetColor();
+            Thread.Sleep(1000);
             Menu();
         }
     }
