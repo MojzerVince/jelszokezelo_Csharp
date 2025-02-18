@@ -286,9 +286,10 @@ namespace jelszokezelo
                             Translator();
                             Save();
                         }
-                        catch
+                        catch (Exception ex)
                         {
                             Console.Clear();
+                            Console.WriteLine(ex);
                             Console.WriteLine("Plese enter a number!");
                         }
                     break;
@@ -504,7 +505,7 @@ namespace jelszokezelo
                     } while (website.Contains(" ") || website == "");
 
                     //1.5.5 után
-                    for (int i = 0; i < pass.Length; i++)
+                    for (int i = 0; i < passwords.Count; i++)
                     {
                         if (passwords[i].email == email && passwords[i].website == website)
                         {
@@ -907,11 +908,13 @@ namespace jelszokezelo
         {
             File.Create("export.txt").Close();
             StreamWriter sw = new StreamWriter("export.txt", false);
-            
-
 
             foreach (Passwords item in passwords)
+            {
+                
                 sw.WriteLine($"{TranslateFromNormalPasswordToLongPassword(item.password)} {item.username} {item.email} {item.website}");
+            }
+                
             sw.Close();
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Black;
