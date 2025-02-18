@@ -35,6 +35,8 @@ namespace jelszokezelo
             LoadTranslateList("trans.txt");
             Load("n.txt");
             Menu();
+
+
         }
 
         static void LoginCheck()
@@ -553,15 +555,15 @@ namespace jelszokezelo
         }
 
         //NINCS HASZNÁLATBAN
-        static string TranslateInverse(string[] split)
+        static string TranslateFromNormalPasswordToLongPassword(string pass)
         {
             string t_pass = "";
 
-            for (int i = 0; i < split.Length; i++)
+            for (int i = 0; i < pass.Length; i++)
             {
                 foreach (Translate item1 in tranlate)
                 {
-                    if (item1.code.ToString() == split[i].ToString())
+                    if (item1.letter.ToString() == pass[i].ToString())
                     {
                         t_pass += item1.code + "|";
                     }
@@ -905,9 +907,11 @@ namespace jelszokezelo
         {
             File.Create("export.txt").Close();
             StreamWriter sw = new StreamWriter("export.txt", false);
+            
+
 
             foreach (Passwords item in passwords)
-                sw.WriteLine($"{item.password} {item.username} {item.email} {item.website}");
+                sw.WriteLine($"{TranslateFromNormalPasswordToLongPassword(item.password)} {item.username} {item.email} {item.website}");
             sw.Close();
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Black;
